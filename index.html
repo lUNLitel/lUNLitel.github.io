@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ryan Wang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Intro Section -->
+  <section id="intro">
+    <button id="about-btn">About</button>
+    <div class="intro-text">
+      <h1>Ryan Wang</h1>
+      <h2>3D Artist & Technical Developer</h2>
+    </div>
+    <div class="scroll-indicator">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <main>
+    <section id="projects">
+      <div class="project">
+        <img src="media/autorig_pointcloud_joints.png" alt="pointcloud with before and after joints">
+        <a href="projects/autorig.html" class="project-title">AutoRig: Deep Learning-Based Automatic Joint Placement for 3D Character Rigging</a>
+      </div>
+      <div class="project">
+        <img src="media/project2-thumb.jpg" alt="Project 2 thumbnail">
+        <a href="projects/project2.html" class="project-title">Project 2 Title</a>
+      </div>
+      <!-- Add more projects here -->
+    </section>
+  </main>
+
+  <!-- About Popup -->
+  <div id="about-popup" class="hidden">
+    <div class="about-content">
+      <span id="close-about">&times;</span>
+      <h3>About Me</h3>
+      <p>I'm a 3D artist and technical developer specializing in character rigging, pipeline tools, and AI-assisted animation.</p>
+      <p>I build systems that make collaboration smoother and creativity more accessible—from Maya scripts that streamline workflows to machine learning models that automate technical tasks. My work lives in the background, enabling other artists to focus on performance and storytelling.</p>
+      <p>I'm drawn to problems at the intersection of art and technology, where thoughtful design can transform how people create together.</p>
+      <p>Email: <a href="mailto:ryan@example.com">ryan@example.com</a></p>
+      <p>LinkedIn: <a href="https://linkedin.com/in/ryanwang" target="_blank">linkedin.com/in/ryanwang</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

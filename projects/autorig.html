@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoRig – Ryan Wang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <a href="../index.html" id="home-btn">Home</a>
+  <button id="about-btn">About</button>
+  
+  <main>
+    <h1>AutoRig: Deep Learning-Based Automatic Joint Placement for 3D Character Rigging</h1>
+    
+    <img src="../media/autorig_pointcloud.png" alt="Point cloud visualization" style="width: 100%; border-radius: 10px; margin-bottom: 30px;">
+
+    <div class="section">
+      <h2>Overview</h2>
+      <p>AutoRig is a machine learning system that automates skeletal joint placement for 3D bipedal characters using PointNet architecture. The system enables a <strong>one-click rigging solution</strong> by converting FBX models to point clouds, predicting 21 joint locations, and generating rigging-ready skeletons in Maya—eliminating the need for manual joint placement that requires extensive anatomical knowledge and rigging expertise.</p>
+    </div>
+
+    <div class="section">
+      <h2>Problem & Motivation</h2>
+      <p>Traditional auto-rigging tools like Advanced Skeleton and Rigify still require users to manually place joints—a tedious process that demands deep knowledge of anatomy and joint deformation. This creates a significant barrier for 3D artists, modelers, and animators who lack rigging specialization. AutoRig solves this by automatically predicting and placing joints, making character rigging accessible to all skill levels.</p>
+    </div>
+
+    <div class="section">
+      <h2>Technical Pipeline</h2>
+      <p><strong>FBX Model → Point Cloud Conversion → PointNet Prediction → Maya Joint Creation</strong></p>
+      <ol>
+        <li><strong>Input:</strong> T-posed bipedal character (FBX format)</li>
+        <li><strong>Conversion:</strong> FBX converted to NPZ point cloud (2048 scattered points)</li>
+        <li><strong>Normalization:</strong> Model scaled to [-1, 1] range and centered</li>
+        <li><strong>Prediction:</strong> PointNet processes point cloud and outputs 21 joint locations</li>
+        <li><strong>Denormalization:</strong> Joints transformed back to original scale</li>
+        <li><strong>Output:</strong> Maya script creates joints at predicted locations</li>
+      </ol>
+      
+      <div style="background: #fff; padding: 20px; border-radius: 10px; margin: 30px 0;">
+        <div class="mermaid">
+graph LR
+    A[FBX Model] --> B[Point Cloud<br/>Conversion]
+    B --> C[Normalization<br/>-1 to 1]
+    C --> D[PointNet<br/>Prediction]
+    D --> E[Denormalization]
+    E --> F[Maya Joint<br/>Creation]
+    
+    style A fill:#e8e4dc
+    style B fill:#e8e4dc
+    style C fill:#e8e4dc
+    style D fill:#d4cfc7
+    style E fill:#e8e4dc
+    style F fill:#e8e4dc
+        </div>
+      </div>
+      <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+          startOnLoad: true,
+          theme: 'base',
+          themeVariables: {
+            primaryColor: '#e8e4dc',
+            primaryTextColor: '#2b2b2b',
+            primaryBorderColor: '#2b2b2b',
+            lineColor: '#2b2b2b',
+            secondaryColor: '#f5f2ed',
+            tertiaryColor: '#faf7f2',
+            fontFamily: 'Cutive Mono, monospace'
+          }
+        });
+      </script>
+    </div>
+
+    <div class="section">
+      <h2>Implementation Details</h2>
+      <p>
+        <strong>Model:</strong> Vanilla PointNet (PyTorch)<br>
+        <strong>Training Data:</strong> 48 Mixamo T-posed characters + 1 test model<br>
+        <strong>Training:</strong> 50 epochs (&lt; 10 seconds)<br>
+        <strong>Point Cloud:</strong> 2048 points per model (scattered sampling)<br>
+        <strong>Output:</strong> 21 core skeletal joints (spine, arms, legs, head—no fingers/toes/face)<br>
+        <strong>Accuracy:</strong> &lt; 0.05 unit error in normalized space<br>
+        <strong>Libraries:</strong> PyTorch, NumPy, Matplotlib, JSON
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Results</h2>
+      
+      <div style="display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+          <img src="../media/autorig_pointcloud.png" alt="Point cloud with original joints" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+        </div>
+        <div style="flex: 1; min-width: 300px;">
+          <img src="../media/autorig_pointcloud_joints.png" alt="Point cloud with predicted joints" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+        </div>
+      </div>
+      <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: -10px; margin-bottom: 30px;">
+        Red joints are predicted joints, while orange joints are original.
+      </p>
+
+      <img src="../media/autorig_result.png" alt="Maya viewport with predicted joints" style="width: 100%; border-radius: 10px; margin-bottom: 30px;">
+
+      <p>The model achieves sub-0.05 unit accuracy with real-time inference speed, successfully predicting joint locations that can be directly imported into Maya for rigging workflows.</p>
+    </div>
+
+    <div class="section">
+      <h2>Current Limitations</h2>
+      <ul>
+        <li><strong>Pose Restriction:</strong> Only works with T-posed characters</li>
+        <li><strong>Arm Joint Accuracy:</strong> Reduced precision on arm joint placement</li>
+        <li><strong>Asymmetry Issues:</strong> Lower accuracy on asymmetrical models</li>
+        <li><strong>Limited Coverage:</strong> No fingers, toes, heel, toe, or facial joints</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Future Development</h2>
+      <ul>
+        <li>Expand training dataset to 500+ models</li>
+        <li>Upgrade to PointNet++ architecture for better local feature extraction</li>
+        <li>Support multiple poses (A-pose, relaxed pose)</li>
+        <li>Add finger, toe, and facial joint prediction (45+ additional joints)</li>
+        <li>Integrate full auto-rigging: skin binding and control rig generation</li>
+        <li>Develop native Maya/Blender plugins for in-software workflow</li>
+        <li>Combine ML with traditional algorithm-based refinement</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Impact</h2>
+      <p>AutoRig demonstrates that deep learning can significantly lower the technical barrier for character rigging, transforming a multi-hour manual process into a one-click solution. This enables artists without rigging expertise to focus on creative work while maintaining production-quality skeletal setups.</p>
+    </div>
+
+    <div class="section">
+      <h3>Tech Stack</h3>
+      <div class="tech-stack">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">PyTorch</span>
+        <span class="tech-tag">PointNet</span>
+        <span class="tech-tag">NumPy</span>
+        <span class="tech-tag">Matplotlib</span>
+        <span class="tech-tag">Maya Python API</span>
+        <span class="tech-tag">Mixamo</span>
+      </div>
+    </div>
+
+    <div class="section divider">
+      <p>
+        <strong>Project Type:</strong> Personal Research<br>
+        <strong>Status:</strong> Prototype/Ongoing Development
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>References</h2>
+      <ul>
+        <li>Qi, C. R., Su, H., Mo, K., & Guibas, L. J. (2017). <em>PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation.</em> In Proc. CVPR. Available at: <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Qi_PointNet_Deep_Learning_CVPR_2017_paper.pdf" target="_blank">https://openaccess.thecvf.com/content_cvpr_2017/papers/Qi_PointNet_Deep_Learning_CVPR_2017_paper.pdf</a>. :contentReference[oaicite:0]{index=0}</li>
+        <li>Qi, C. R., Yi, L., Su, H., & Guibas, L. J. (2017). <em>PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space.</em> In Advances in Neural Information Processing Systems 30. Available at: <a href="https://proceedings.neurips.cc/paper/7095-pointnet-deep-hierarchical-feature-learning-on-point-sets-in-a-metric-space.pdf" target="_blank">https://proceedings.neurips.cc/paper/7095-pointnet-deep-hierarchical-feature-learning-on-point-sets-in-a-metric-space.pdf</a>. :contentReference[oaicite:1]{index=1}</li>
+        <li>Baran, I., & Popović, J. (2007). <em>Automatic Rigging and Animation of 3D Characters.</em> In Proc. SIGGRAPH. Available at: <a href="https://www.cs.toronto.edu/~jacobson/seminar/baran-and-popovic-2007.pdf" target="_blank">https://www.cs.toronto.edu/~jacobson/seminar/baran-and-popovic-2007.pdf</a>. :contentReference[oaicite:2]{index=2}</li>
+        <li>Xu, Z., Zhou, Y., Kalogerakis, E., Landreth, C., & Singh, K. (2020). <em>RigNet: Neural Rigging for Articulated Characters.</em> In Proc. SIGGRAPH. Available at: <a href="https://zhan-xu.github.io/rig-net/RigNet.pdf" target="_blank">https://zhan-xu.github.io/rig-net/RigNet.pdf</a>. :contentReference[oaicite:3]{index=3}</li>
+        <li>Kim, J., et al. (2021). <em>Auto-rigging 3D Bipedal Characters in Arbitrarily Poses.</em> EuroGraphics Symposium on Sketch-Based Interfaces and Modeling. Available at: <a href="https://diglib.eg.org/bitstream/handle/10.2312/egs20211023/057-060.pdf" target="_blank">https://diglib.eg.org/bitstream/handle/10.2312/egs20211023/057-060.pdf</a>. :contentReference[oaicite:4]{index=4}</li>
+        <li>Hong, S., Choi, S., Kim, C., Cha, S., & Noh, J. (2025). <em>ASMR: Adaptive Skeleton-Mesh Rigging and Skinning via 2D Generative Prior.</em> arXiv preprint. Available at: <a href="https://arxiv.org/abs/2503.13579" target="_blank">https://arxiv.org/abs/2503.13579</a>. :contentReference[oaicite:5]{index=5}</li>
+        <li>“Concept and discussion assisted by ChatGPT (OpenAI) & Claude (Anthropic).”</li>
+      </ul>
+    </div>
+    
+  </main>
+
+  <!-- About Popup -->
+  <div id="about-popup" class="hidden">
+    <div class="about-content">
+      <span id="close-about">&times;</span>
+      <h3>About Me</h3>
+      <p>I'm a 3D artist and technical developer specializing in character rigging, pipeline tools, and AI-assisted animation.</p>
+      <p>I build systems that make collaboration smoother and creativity more accessible—from Maya scripts that streamline workflows to machine learning models that automate technical tasks. My work lives in the background, enabling other artists to focus on performance and storytelling.</p>
+      <p>I'm drawn to problems at the intersection of art and technology, where thoughtful design can transform how people create together.</p>
+      <p>Email: <a href="mailto:ryan@example.com">ryan@example.com</a></p>
+      <p>LinkedIn: <a href="https://linkedin.com/in/ryanwang" target="_blank">linkedin.com/in/ryanwang</a></p>
+    </div>
+  </div>
+  <script src="../script.js"></script>
+</body>
+</html>
