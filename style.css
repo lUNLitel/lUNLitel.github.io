@@ -61,7 +61,7 @@ body {
 
 /* About button on top right */
 #about-btn {
-  position: fixed;
+  position: absolute;
   top: 20px;
   right: 20px;
   background: none;
@@ -75,12 +75,29 @@ body {
   margin: 0;
   line-height: 1.5;
   vertical-align: baseline;
-  z-index: 1000;
 }
 
 /* Home button on top right (next to About) */
 #home-btn {
-  position: fixed;
+  position: absolute;
+  top: 20px;
+  right: 250px;
+  background: none;
+  border: none;
+  font-family: 'Cutive Mono', monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #2b2b2b;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  vertical-align: baseline;
+}
+
+/* Projects button on top right (between Home and About) */
+#projects-btn {
+  position: absolute;
   top: 20px;
   right: 120px;
   background: none;
@@ -94,10 +111,10 @@ body {
   margin: 0;
   line-height: 1.5;
   vertical-align: baseline;
-  z-index: 1000;
 }
 
 #home-btn:hover,
+#projects-btn:hover,
 #about-btn:hover {
   text-decoration: underline;
 }
@@ -107,16 +124,35 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 80px;
+  gap: 50px;
   padding: 120px 0 100px;
 }
 
 .project {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 1400px;
+  width: 95%;
+  border-radius: 10px;
+  padding: 30px;
+  background: #f5f0e8;
+}
+
+.project-link {
+  display: flex;
   align-items: center;
   gap: 40px;
-  max-width: 1000px;
-  width: 80%;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.project-link:hover {
+  opacity: 0.8;
 }
 
 .project img {
@@ -132,8 +168,10 @@ body {
   text-decoration: none;
 }
 
-.project-title:hover {
-  text-decoration: underline;
+.project .tech-stack {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0;
 }
 
 /* About popup */
@@ -248,4 +286,224 @@ main strong {
   margin-top: 50px;
   padding-top: 30px;
   border-top: 1px solid #ddd;
+}
+
+/* Video container for YouTube embeds */
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  margin: 30px 0;
+  border-radius: 10px;
+  background: #000;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+/* ========== MOBILE RESPONSIVE STYLES ========== */
+
+@media (max-width: 768px) {
+  /* Intro section mobile adjustments */
+  #intro {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 80px; /* Space for navigation buttons */
+  }
+
+  #intro h1 {
+    font-size: 2.5rem;
+  }
+
+  #intro h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Navigation buttons - larger touch targets and better positioning */
+  #about-btn,
+  #home-btn,
+  #projects-btn {
+    font-size: 1rem;
+    padding: 10px 15px;
+    min-height: 44px; /* Minimum touch target size */
+    min-width: 60px;
+    right: 10px;
+  }
+
+  #projects-btn {
+    right: 135px;
+  }
+
+  #home-btn {
+    right: 260px;
+  }
+
+  /* Projects section mobile */
+  #projects {
+    padding: 80px 5% 60px;
+    gap: 60px;
+  }
+
+  .project {
+    width: 100%;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .project-link {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .project img {
+    width: 100%;
+  }
+
+  .project-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .project .tech-stack {
+    padding: 0 10px;
+  }
+
+  /* Main content mobile */
+  main {
+    padding: 80px 5% 60px;
+  }
+
+  main h1 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section h2 {
+    font-size: 1.3rem;
+  }
+
+  .section h3 {
+    font-size: 1.1rem;
+  }
+
+  main p,
+  main li {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* About popup mobile */
+  .about-content {
+    padding: 30px 20px;
+    margin: 20px;
+    max-width: calc(100% - 40px);
+  }
+
+  /* Scroll indicator mobile */
+  .scroll-indicator {
+    bottom: 30px;
+  }
+
+  /* Tech stack tags mobile */
+  .tech-stack {
+    gap: 8px;
+  }
+
+  .tech-tag {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  #intro {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  #intro h1 {
+    font-size: 2rem;
+  }
+
+  #intro h2 {
+    font-size: 1rem;
+  }
+
+  #about-btn,
+  #home-btn,
+  #projects-btn {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    right: 5px;
+  }
+
+  #projects-btn {
+    right: 85px;
+  }
+
+  #home-btn {
+    right: 175px;
+  }
+
+  main h1 {
+    font-size: 1.5rem;
+  }
+
+  .section h2 {
+    font-size: 1.2rem;
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+  }
+
+  /* Ensure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* For touch devices */
+  #about-btn:hover,
+  #home-btn:hover,
+  #projects-btn:hover {
+    text-decoration: none;
+  }
+
+  #about-btn:active,
+  #home-btn:active,
+  #projects-btn:active {
+    opacity: 0.7;
+  }
+
+  .project:active {
+    opacity: 0.7;
+  }
+}
+
+/* Prevent text size adjustment on iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
 }

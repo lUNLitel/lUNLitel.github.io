@@ -9,10 +9,17 @@
 </head>
 <body>
   <a href="../index.html" id="home-btn">Home</a>
+  <a href="../index.html#projects" id="projects-btn">Projects</a>
   <button id="about-btn">About</button>
   
   <main>
     <h1>AutoRig: Deep Learning-Based Automatic Joint Placement for 3D Character Rigging</h1>
+    
+    <p style="margin-top: 10px; margin-bottom: 30px; color: #666; font-size: 1rem;">
+      <strong>Developed by Ryan Wang</strong><br>
+        With technical support from <strong>Tommy Hu</strong> and <strong>Rui</strong><br>
+        <a href="https://github.com/lUNLitel/autorig-joint-placement" target="_blank" style="color: #2b2b2b; text-decoration: underline; margin-top: 10px; display: inline-block;">View on GitHub →</a>
+    </p>
     
     <img src="../media/autorig_pointcloud.png" alt="Point cloud visualization" style="width: 100%; border-radius: 10px; margin-bottom: 30px;">
 
@@ -90,18 +97,24 @@ graph LR
       <h2>Results</h2>
       
       <div style="display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 300px;">
+        <div style="flex: 1; min-width: 250px;">
           <img src="../media/autorig_pointcloud.png" alt="Point cloud with original joints" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+          <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 0;">
+            pointcloud visualization of converted FBX
+          </p>
         </div>
-        <div style="flex: 1; min-width: 300px;">
+        <div style="flex: 1; min-width: 250px;">
           <img src="../media/autorig_pointcloud_joints.png" alt="Point cloud with predicted joints" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+          <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 0;">
+            pointcloud visualization with predicted and original joints (Red joints are predicted joints, Orange joints are original)
+          </p>
         </div>
       </div>
-      <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: -10px; margin-bottom: 30px;">
-        Red joints are predicted joints, while orange joints are original.
-      </p>
 
-      <img src="../media/autorig_result.png" alt="Maya viewport with predicted joints" style="width: 100%; border-radius: 10px; margin-bottom: 30px;">
+      <img src="../media/autorig_result.png" alt="Maya viewport with predicted joints" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+      <p style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 0; margin-bottom: 30px;">
+        joints imported to Maya and applied to example character mesh
+      </p>
 
       <p>The model achieves sub-0.05 unit accuracy with real-time inference speed, successfully predicting joint locations that can be directly imported into Maya for rigging workflows.</p>
     </div>
