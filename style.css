@@ -4,6 +4,7 @@ body {
   color: #2b2b2b;
   margin: 0;
   padding: 0;
+  padding-bottom: 250px;
   overflow-x: hidden; /* prevent horizontal scroll */
 }
 
@@ -156,11 +157,15 @@ body {
 }
 
 .project img {
-  width: 60%;
-  height: auto;
+  max-height: 250px;   /* max vertical size */
+  width: auto;         /* width adjusts automatically */
+  max-width: 60%;      /* but don't get wider than this */
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: block;      /* removes inline space */
+  margin: 0 auto;      /* center horizontally */
 }
+
 
 .project-title {
   font-size: 1.5rem;
