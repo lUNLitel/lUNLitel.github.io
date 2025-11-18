@@ -55,6 +55,63 @@ if (navBar) {
   navBar.classList.add('visible');
 }
 
+// ========== PROJECT FILTERING ==========
+// Filter projects by category on homepage
+
+function initProjectFilters() {
+  // Only run on homepage
+  if (!document.body.classList.contains('homepage')) {
+    return;
+  }
+
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const projects = document.querySelectorAll('#projects .project');
+
+  if (filterButtons.length === 0 || projects.length === 0) {
+    return;
+  }
+
+  function filterProjects(category) {
+    // Update active button
+    filterButtons.forEach(btn => {
+      if (btn.dataset.category === category) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Filter projects
+    projects.forEach(project => {
+      const projectCategory = project.dataset.category;
+      
+      if (category === 'all' || projectCategory === category) {
+        project.classList.remove('hidden');
+      } else {
+        project.classList.add('hidden');
+      }
+    });
+  }
+
+  // Add click handlers to filter buttons
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.dataset.category;
+      filterProjects(category);
+    });
+  });
+
+  // Initialize with 'all' selected (default)
+  filterProjects('all');
+}
+
+// Initialize project filters when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initProjectFilters);
+} else {
+  initProjectFilters();
+}
+
 // ========== PROJECT NAVIGATION ==========
 // Dynamically add previous/next project navigation based on index.html order
 

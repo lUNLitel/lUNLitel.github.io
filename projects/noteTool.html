@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maya Notes Plugin: Persistent Scene Annotations with Custom Node Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-buttons">
+      <a href="/" id="home-btn">Home</a>
+      <a href="/#projects" id="projects-btn">Projects</a>
+      <a href="/about/" id="about-btn">About</a>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Maya Notes Plugin: Persistent Scene Annotations with Custom Node Architecture</h1>
+    
+    <div class="meta">
+      <strong>Developed by Ryan Wang</strong><br>
+      Technical Support from <strong>Claude (Anthropic)</strong><br>
+      <a href="#" target="_blank">View on GitHub →</a>
+    </div>
+
+    <div class="section">
+      <img src="../media/noteTool/playPreview.gif" alt="Maya Notes Plugin preview animation" style="width: 100%; border-radius: 10px; margin: 30px 0;">
+    </div>
+
+    <div class="section">
+      <h2>Overview</h2>
+      <p>Maya Notes Plugin is a production-ready tool that embeds persistent text annotations directly into Maya scene files using a custom locator node architecture. The plugin provides a <strong>floating, always-on-top text editor</strong> with <strong>real-time viewport display</strong>, enabling artists to document scene state, leave TODO lists, and maintain project continuity—eliminating the need for external documentation files that become desynchronized from scene files.</p>
+    </div>
+
+    <div class="section">
+      <h2>Problem & Motivation</h2>
+      <div class="highlight-box">
+        <p><strong>Pain Points Solved:</strong></p>
+        <ul>
+          <li><strong>Lost Context:</strong> Opening a scene weeks later with no memory of what needs to be done or what's broken</li>
+          <li><strong>No Native Note Storage:</strong> Maya has no built-in system for scene-level annotations—artists resort to external text files that get lost or outdated</li>
+          <li><strong>Collaboration Friction:</strong> Team members can't see previous artist's notes, leading to duplicate work or missed issues</li>
+          <li><strong>TODO Management:</strong> No centralized place to track incomplete work within the scene itself</li>
+        </ul>
+      </div>
+      <p>This plugin transforms Maya scenes into self-documenting files where notes travel with the scene, ensuring every artist who opens the file knows exactly what to work on next.</p>
+    </div>
+
+    <div class="section">
+      <h2>Technical Architecture</h2>
+      
+      <h3>Custom Node Design (Maya API 2.0)</h3>
+      <p>Built using <strong>MPxLocatorNode</strong> base class with custom attributes:</p>
+      <ul>
+        <li><strong>noteText (String):</strong> Main annotation content</li>
+        <li><strong>noteTitle (String):</strong> Human-readable identifier</li>
+        <li><strong>displayInViewport (Boolean):</strong> Toggle viewport overlay</li>
+        <li><strong>fontSize (Integer):</strong> Viewport text size (8-72pt)</li>
+        <li><strong>textColor (RGB):</strong> Customizable display color</li>
+      </ul>
+
+      <h3>Viewport 2.0 Draw Override</h3>
+      <p>Implements <strong>MPxDrawOverride</strong> for real-time viewport text rendering:</p>
+      <ul>
+        <li><strong>prepareForDraw():</strong> Extracts node attributes via MPlug API</li>
+        <li><strong>addUIDrawables():</strong> Renders text overlay using MUIDrawManager</li>
+        <li>Supports multi-line display with automatic line breaking</li>
+      </ul>
+
+      <h3>Qt-Based Editor Interface</h3>
+      <p>PySide2 dialog with <strong>WindowStaysOnTopHint</strong> flag:</p>
+      <ul>
+        <li>Auto-positions to right side of Maya window on startup</li>
+        <li>Dropdown selector for switching between multiple note nodes</li>
+        <li>Plain text editor with Courier font for code/script snippets</li>
+        <li>Real-time attribute synchronization via cmds.setAttr()</li>
+      </ul>
+
+      <h3>Organizational Structure</h3>
+      <p>Notes are organized under a locked <strong>"NOTES" group</strong> in the outliner:</p>
+      <ul>
+        <li>Transform nodes automatically named "note_[Title]" based on content</li>
+        <li>Group transforms locked to prevent accidental movement</li>
+        <li>Clean outliner hierarchy for easy scene management</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Implementation Methods</h2>
+      
+      <h3>1. Maya API 2.0 Plugin Registration</h3>
+      <div class="code-block">
+def maya_useNewAPI():
+    pass  # Forces Maya to use API 2.0
+
+def initializePlugin(obj):
+    plugin = om2.MFnPlugin(obj, "Notes Plugin", "1.0", "Any")
+    plugin.registerNode(
+        kPluginNodeName,
+        kPluginNodeId,
+        NotesNode.creator,
+        NotesNode.initialize,
+        om2.MPxNode.kLocatorNode
+    )
+      </div>
+
+      <h3>2. Attribute Creation with Function Sets</h3>
+      <div class="code-block">
+tAttr = om2.MFnTypedAttribute()
+NotesNode.noteText = tAttr.create("noteText", "nt", om2.MFnData.kString)
+tAttr.writable = True
+tAttr.storable = True  # Persists in .ma/.mb files
+NotesNode.addAttribute(NotesNode.noteText)
+      </div>
+
+      <h3>3. Viewport Drawing Pipeline</h3>
+      <div class="code-block">
+def prepareForDraw(self, objPath, cameraPath, frameContext, oldData):
+    node = objPath.node()
+    plug = om2.MPlug(node, NotesNode.noteText)
+    data['text'] = plug.asString()  # Extract attribute value
+    return data
+
+def addUIDrawables(self, objPath, drawManager, frameContext, data):
+    drawManager.setColor(om2.MColor(color))
+    drawManager.text(position, text, omr2.MUIDrawManager.kCenter)
+      </div>
+
+      <h3>4. Qt Signal-Slot Event Handling</h3>
+      <div class="code-block">
+self.nodeCombo.currentIndexChanged.connect(self.loadNote)
+saveBtn.clicked.connect(self.saveNote)
+
+def saveNote(self):
+    cmds.setAttr(self.currentNode + ".noteTitle", title, type="string")
+    cmds.setAttr(self.currentNode + ".noteText", text, type="string")
+      </div>
+
+      <h3>5. Auto-Startup Integration</h3>
+      <div class="code-block">
+cmds.evalDeferred(showNotesEditor)  # Open editor after Maya loads
+cmds.pluginInfo("notesPlugin", edit=True, autoload=True)  # Auto-load on startup
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>Scene-Embedded Storage:</strong> Notes saved directly in .ma/.mb files—no external files needed</li>
+        <li><strong>Always-On-Top Editor:</strong> Stays visible while working in viewport</li>
+        <li><strong>Auto-Launch:</strong> Editor opens automatically when Maya starts</li>
+        <li><strong>Multiple Notes:</strong> Create unlimited notes per scene with dropdown switching</li>
+        <li><strong>Viewport Overlay:</strong> Display notes as 3D text overlays (toggleable)</li>
+        <li><strong>Organized Outliner:</strong> Notes grouped under locked "NOTES" parent for clean hierarchy</li>
+        <li><strong>Dynamic Naming:</strong> Transform nodes auto-rename based on note title</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Use Cases</h2>
+      <ul>
+        <li><strong>Production TODO Lists:</strong> Track incomplete animations, broken rigs, or placeholder assets</li>
+        <li><strong>Technical Documentation:</strong> Store setup instructions, script snippets, or render settings</li>
+        <li><strong>Collaboration Notes:</strong> Leave messages for other artists about scene state or known issues</li>
+        <li><strong>Version Control:</strong> Document what changed between scene versions</li>
+        <li><strong>Asset Handoff:</strong> Include rigging instructions or deformation warnings for animators</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Current Limitations</h2>
+      <ul>
+        <li><strong>Viewport Performance:</strong> Text rendering may impact FPS with many notes visible</li>
+        <li><strong>Limited Formatting:</strong> Plain text only—no rich text or Markdown support</li>
+        <li><strong>No Search:</strong> Must manually browse notes via dropdown</li>
+        <li><strong>Single Editor Instance:</strong> Can't view multiple notes simultaneously</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Future Development</h2>
+      <ul>
+        <li><strong>Enhanced UI:</strong> Dockable editor panel, tabbed interface for multiple notes, search/filter functionality</li>
+        <li><strong>Rich Text Support:</strong> Markdown rendering, code syntax highlighting, embedded images</li>
+        <li><strong>Template System:</strong> Pre-defined note templates for common tasks (shot checklist, rig QA, etc.)</li>
+        <li><strong>Timeline Integration:</strong> Frame-specific notes that appear at keyframes</li>
+        <li><strong>Export/Import:</strong> Batch export notes to PDF/HTML reports</li>
+        <li><strong>Cloud Sync:</strong> Optional cloud backup for notes across team members</li>
+        <li><strong>Asset Browser:</strong> Scene-wide note overview panel with categorization</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Impact</h2>
+      <p>Maya Notes Plugin demonstrates how custom node architecture can extend Maya's core functionality to solve real production pain points. By embedding documentation directly into scene files, it eliminates the context-switching cost of external note-taking tools and ensures critical information never gets lost. This is especially valuable in team environments where scene handoffs are common, or for solo artists returning to projects after long breaks.</p>
+    </div>
+
+    <div class="section">
+      <h3>Tech Stack</h3>
+      <div class="tech-stack">
+        <span class="tech-tag">Python 3</span>
+        <span class="tech-tag">Maya API 2.0</span>
+        <span class="tech-tag">OpenMaya</span>
+        <span class="tech-tag">OpenMayaUI</span>
+        <span class="tech-tag">OpenMayaRender</span>
+        <span class="tech-tag">PySide2 (Qt)</span>
+        <span class="tech-tag">MPxLocatorNode</span>
+        <span class="tech-tag">MPxDrawOverride</span>
+      </div>
+    </div>
+
+    <div class="section divider">
+      <p>
+        <strong>Project Type:</strong> Production Tool Development<br>
+        <strong>Status:</strong> Active Development<br>
+        <strong>Developed:</strong> November 2024
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Technical References</h2>
+      <ul>
+        <li>Autodesk. (2023). <em>Maya Python API 2.0 Reference.</em> Available at: <a href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_py_ref_index_html" target="_blank">Maya API Documentation</a></li>
+        <li>Autodesk. (2023). <em>Viewport 2.0 API for Python.</em> Available at: <a href="https://help.autodesk.com/view/MAYAUL/2023/ENU/?guid=Maya_SDK_MERGED_py_ref_class_open_maya_render_1_1_m_px_draw_override_html" target="_blank">Viewport 2.0 Documentation</a></li>
+        <li>Qt Company. (2024). <em>PySide2 Documentation.</em> Available at: <a href="https://doc.qt.io/qtforpython-5/" target="_blank">PySide2 Docs</a></li>
+        <li>"Developed with technical assistance from Claude (Anthropic)."</li>
+      </ul>
+    </div>
+    
+  </main>
+  <script src="../script.js"></script>
+</body>
+</html>

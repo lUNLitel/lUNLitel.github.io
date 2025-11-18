@@ -34,9 +34,17 @@
   <!-- Projects Section -->
   <main>
     <section id="projects">
-      <div class="project">
+      <!-- Filter Buttons -->
+      <div class="project-filters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="r&d">R&D</button>
+        <button class="filter-btn" data-category="film">Film</button>
+        <button class="filter-btn" data-category="games">Games</button>
+      </div>
+
+      <div class="project" data-category="r&d">
         <a href="projects/autorig.html" class="project-link">
-          <img src="media/autorig_pointcloud_joints.png" alt="pointcloud with before and after joints">
+          <img src="media/autoRig/thumbnail.png" alt="AutoRig pointcloud preview">
           <div class="project-title">AutoRig: Deep Learning-Based Automatic Joint Placement for 3D Character Rigging</div>
         </a>
         <div class="tech-stack">
@@ -49,7 +57,7 @@
           <span class="tech-tag">Mixamo</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="film">
         <a href="projects/dreamAway.html" class="project-link">
           <img src="media/dreamAway/Poster_DreamAway.png" alt="DreamAway Poster">
           <div class="project-title">DreamAway: 3rd Year Student Film</div>
@@ -64,7 +72,20 @@
           <span class="tech-tag">Python</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="r&d">
+        <a href="projects/noteTool.html" class="project-link">
+          <img src="media/noteTool/thumbnail.png" alt="Maya Notes Plugin thumbnail">
+          <div class="project-title">Maya Notes Plugin: Persistent Scene Annotations</div>
+        </a>
+        <div class="tech-stack">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Maya API 2.0</span>
+          <span class="tech-tag">PySide2</span>
+          <span class="tech-tag">OpenMaya</span>
+          <span class="tech-tag">MPxLocatorNode</span>
+        </div>
+      </div>
+      <div class="project" data-category="games">
         <a href="projects/trackStar.html" class="project-link">
           <img src="media/trackStar/titlePage.png" alt="Trackstar - 3D Tower Defense Game">
           <div class="project-title">Trackstar: GMTK Gamejam 2025</div>
@@ -81,7 +102,7 @@
           <span class="tech-tag">Clicker</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="games">
         <a href="projects/tiltingIslands.html" class="project-link">
           <img src="media/tiltingIslands/thumbnail.png" alt="Tilting Islands Thumbnail">
           <div class="project-title">Tilting Islands: GMTK Gamejam 2024</div>
@@ -94,7 +115,7 @@
           <span class="tech-tag">C#</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="games">
         <a href="projects/wholesomeRansom.html" class="project-link">
           <img src="media/wholesomeRansom/thumbnail.png" alt="Wholesome Ransom Thumbnail">
           <div class="project-title">Wholesome Ransom: GMTK Gamejam 2023</div>
@@ -108,7 +129,7 @@
           <span class="tech-tag">C#</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="games">
         <a href="projects/buggedOut.html" class="project-link">
           <img src="media/buggedOut/thumbnail_01.png" alt="Bugged Out Thumbnail">
           <div class="project-title">Bugged Out: Bracky's Game Jam 2023</div>
@@ -122,7 +143,7 @@
           <span class="tech-tag">C#</span>
         </div>
       </div>
-      <div class="project">
+      <div class="project" data-category="games">
         <a href="projects/sushiToGo.html" class="project-link">
           <img src="media/sushiToGo/thumbnail.png" alt="Sushi to Go Thumbnail">
           <div class="project-title">Sushi to Go: GMTK Gamejam 2022</div>
