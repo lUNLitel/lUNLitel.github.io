@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15-763 Prep · Daily Check-in</title>
+<meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 15-763 Physics-based Animation of Solids and Fluids.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f1ea; --card:#fffdf8; --ink:#1d1b18; --muted:#6f6a60; --line:#e2ddd2;
+    --accent:#d4552b; --accent-soft:#f6dccf; --good:#2f7d5b; --good-soft:#d8ecdf;
+    --h0:#ebe6da; --h1:#f3c9b5; --h2:#e99773; --h3:#d4552b;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#15140f; --card:#1e1c17; --ink:#efeae0; --muted:#a39d90; --line:#34312a;
+      --accent:#ef7a4f; --accent-soft:#3d2419; --good:#6fc39b; --good-soft:#1d3329;
+      --h0:#2a2722; --h1:#5a3122; --h2:#a34d2c; --h3:#ef7a4f;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font:15px/1.55 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  .wrap{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+  header h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 6px;letter-spacing:-.01em}
+  header p{margin:0;color:var(--muted)}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  .eyebrow{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+  .stat b{display:block;font:600 22px/1.1 "JetBrains Mono",monospace}
+  .stat span{font-size:12px;color:var(--muted)}
+  @media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  .bar{height:8px;background:var(--h0);border-radius:99px;overflow:hidden;margin:-8px 0 22px}
+  .bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px}
+  .today h2{font-family:Fraunces,Georgia,serif;font-size:24px;line-height:1.2;margin:0 0 8px}
+  .today .what{margin:0 0 12px}
+  .links{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .links a{font-size:13px;text-decoration:none;border:1px solid var(--line);padding:5px 10px;border-radius:99px;background:var(--paper)}
+  .links a:hover{border-color:var(--accent)}
+  .pace{font-size:13px;color:var(--muted);margin:-4px 0 14px}
+  .pace.ahead{color:var(--good)} .pace.behind{color:var(--accent)}
+
+  form.checkin{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:start}
+  label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+  input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+  textarea{min-height:44px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .row-full{grid-column:1/-1}
+  button{font:600 14px Inter,sans-serif;border:0;border-radius:10px;padding:11px 16px;cursor:pointer;background:var(--ink);color:var(--paper)}
+  button.primary{background:var(--accent);color:#fff}
+  button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  button:disabled{opacity:.5;cursor:default}
+  .done-msg{background:var(--good-soft);color:var(--good);border-radius:10px;padding:10px 12px;font-weight:500;margin-bottom:12px}
+
+  h3.section{font-family:Fraunces,Georgia,serif;font-size:20px;margin:30px 0 12px}
+
+  .heat{display:grid;grid-template-columns:auto repeat(7,1fr);gap:5px;align-items:center}
+  .heat .lbl{font:11px "JetBrains Mono",monospace;color:var(--muted);padding-right:6px}
+  .heat .cell{aspect-ratio:1;border-radius:6px;background:var(--h0);position:relative;max-height:46px}
+  .heat .cell.l1{background:var(--h1)} .heat .cell.l2{background:var(--h2)} .heat .cell.l3{background:var(--h3)}
+  .heat .cell.today{outline:2px solid var(--ink);outline-offset:1px}
+  .heat .cell.future{opacity:.45}
+  .heat .cell span{position:absolute;inset:0;display:grid;place-items:center;font:10px "JetBrains Mono",monospace;color:var(--muted)}
+  .heat .cell.l2 span,.heat .cell.l3 span{color:#fff}
+  .legend{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  details.week{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+  details.week summary{cursor:pointer;list-style:none;padding:14px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  details.week summary::-webkit-details-marker{display:none}
+  details.week summary .t{font-weight:600}
+  details.week summary .c{font:12px "JetBrains Mono",monospace;color:var(--muted);white-space:nowrap}
+  details.week .goal{padding:0 18px 8px;color:var(--muted);font-size:14px;margin:0}
+  .task{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:12px 18px;border-top:1px solid var(--line)}
+  .task input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+  .task .tt{font-weight:600}
+  .task .tt small{font:11px "JetBrains Mono",monospace;color:var(--muted);margin-right:6px}
+  .task p{margin:3px 0 6px;color:var(--muted);font-size:14px}
+  .task .links{margin:0}
+  .task.is-done .tt{text-decoration:line-through;text-decoration-color:var(--muted)}
+  .task .when{font:11px "JetBrains Mono",monospace;color:var(--good)}
+
+  .log{list-style:none;padding:0;margin:0}
+  .log li{padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+  .log li:first-child{border-top:0}
+  .log .d{font:12px "JetBrains Mono",monospace;color:var(--muted)}
+  .log .n{color:var(--muted);margin-top:2px}
+
+  .settings{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+  .settings .f{min-width:180px}
+  .note{font-size:12px;color:var(--muted);margin-top:10px}
+  footer{margin-top:40px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CMU 15-763 · Spring 2027 · Prep</div>
+    <h1>One hour a day toward<br>physics-based animation</h1>
+    <p>An 8-week plan: linear algebra → calculus → time integration → optimization → Minchen Li's <em>Physics-Based Simulation</em> book → research mode.</p>
+  </header>
+
+  <section class="stats" aria-label="Progress">
+    <div class="stat"><b id="sDone">0/56</b><span>sessions done</span></div>
+    <div class="stat"><b id="sStreak">0</b><span>day streak</span></div>
+    <div class="stat"><b id="sHours">0h</b><span>time logged</span></div>
+    <div class="stat"><b id="sLeft">–</b><span id="sLeftLbl">days left in plan</span></div>
+  </section>
+  <div class="bar" aria-hidden="true"><i id="pBar" style="width:0"></i></div>
+
+  <section class="card today" id="today" aria-live="polite"></section>
+
+  <h3 class="section">Calendar</h3>
+  <div class="card">
+    <div class="heat" id="heat"></div>
+    <div class="legend">less <i style="background:var(--h0)"></i><i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i> more · outlined = today</div>
+  </div>
+
+  <h3 class="section">The plan</h3>
+  <div id="weeks"></div>
+
+  <h3 class="section">Check-in log</h3>
+  <div class="card"><ul class="log" id="log"></ul></div>
+
+  <h3 class="section">Settings &amp; backup</h3>
+  <div class="card">
+    <div class="settings">
+      <div class="f"><label for="startDate">Plan start date</label><input type="date" id="startDate"></div>
+      <button class="ghost" id="btnExport" type="button">Export progress</button>
+      <button class="ghost" id="btnImport" type="button">Import progress</button>
+      <button class="ghost" id="btnReset" type="button">Reset everything</button>
+      <input type="file" id="fileIn" accept="application/json" hidden>
+    </div>
+    <p class="note">Progress is saved in this browser only. To move it to another device, export here and import there.</p>
+  </div>
+
+  <footer>Course: <a href="https://www.cs.cmu.edu/~15763-s26/">15-763 course page</a> · Book: <a href="https://phys-sim-book.github.io/">phys-sim-book.github.io</a></footer>
+</div>
+
+<script>
+const B = "https://phys-sim-book.github.io/";
+const L = {
+  eola: ["Essence of Linear Algebra", "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab"],
+  khan: ["Khan Academy: Multivariable calculus", "https://www.khanacademy.org/math/multivariable-calculus"],
+  bw: ["Baraff & Witkin course notes", "https://www.cs.cmu.edu/~baraff/sigcourse/"],
+  numpy: ["NumPy quickstart", "https://numpy.org/doc/stable/user/quickstart.html"],
+  scipy: ["scipy.sparse", "https://docs.scipy.org/doc/scipy/reference/sparse.html"],
+  ipc: ["IPC project page", "https://ipc-sim.github.io/"],
+  course: ["15-763 course page", "https://www.cs.cmu.edu/~15763-s26/"],
+  book: ["Book home", B],
+};
+const bk = (label, path) => [label, B + path];
+
+const WEEKS = [
+ { t:"Linear algebra intuition", g:"See matrices as transformations, and get comfortable with NumPy.", d:[
+  ["Set up + vectors","Set up Python with NumPy and Matplotlib (a venv or Jupyter). Watch the first two Essence of Linear Algebra videos: vectors, span and basis.",[L.eola,L.numpy]],
+  ["Transformations","Watch the videos on linear transformations and matrix multiplication. Code: apply a 2×2 matrix to a grid of points and plot before and after.",[L.eola]],
+  ["Determinant & inverse","Watch the videos on the determinant and on inverse, column space and null space. Code: compute det of a few 2D deformation matrices. What does det < 0 look like? (You'll see this again as 'element inversion'.)",[L.eola]],
+  ["Dot & cross products","Watch the dot product and cross product videos. Code: compute a triangle's area and normal from its 3 vertices.",[L.eola]],
+  ["Change of basis & eigenvectors","Watch the change of basis and eigenvector videos. Connect it: a joint's orient is a change of basis. Code: np.linalg.eig on a symmetric matrix and plot the eigenvectors.",[L.eola]],
+  ["Solving Ax = b","Why solve() beats inv(). Build a 1D Laplacian (tridiagonal) with scipy.sparse and solve it. Every simulator step comes down to this.",[L.scipy]],
+  ["Review + cheat sheet","Catch up if behind. Write a one-page cheat sheet: transform, det, inverse, eigen, solve.",[]],
+ ]},
+ { t:"Multivariable calculus & energies", g:"Gradients, Jacobians, Hessians, and checking derivatives numerically.", d:[
+  ["Gradients","Partial derivatives, gradient and directional derivative. Code: plot contours of f(x,y) with gradient arrows on top.",[L.khan]],
+  ["Jacobians","The Jacobian as the local linear map. Code: a finite-difference Jacobian of a 2D map, compared with the analytic one.",[L.khan]],
+  ["Hessian & Taylor","The Hessian and the 2nd-order Taylor approximation. This is what Newton's method uses.",[L.khan]],
+  ["Spring energy: gradient","E = ½k(‖x₁−x₂‖ − L)². Derive ∂E/∂x by hand, then verify with finite differences. A gradient check is your #1 debugging tool.",[]],
+  ["Spring energy: Hessian","Derive the Hessian (the 2×2 blocks), then verify it with finite differences of your gradient.",[]],
+  ["Positive definiteness","Eigenvalues of the spring Hessian when stretched vs compressed. Notice negative ones when compressed: that's why 'projected Newton' exists.",[]],
+  ["Review","Catch up. Add derivatives and gradient checking to your cheat sheet.",[]],
+ ]},
+ { t:"Time integration", g:"Explicit vs implicit, and why stiff springs explode.", d:[
+  ["ODE basics","Baraff & Witkin: 'Differential Equation Basics' notes.",[L.bw]],
+  ["Book ch.1 (1.1–1.3)","Solid representations, Newton's second law, time integration.",[bk("1.1 Solid geometry","simulation-with-optimization/discrete-space-and-time/solid_rep.html"),bk("1.3 Time integration","simulation-with-optimization/discrete-space-and-time/time_integration.html")]],
+  ["Explicit Euler","Read 1.4. Code: a mass on a spring with forward Euler. Plot energy over time and watch it grow.",[bk("1.4 Explicit","simulation-with-optimization/discrete-space-and-time/explicit_time_integration.html")]],
+  ["Implicit Euler","Read 1.5. Code: backward Euler for the same spring. Raise the stiffness ×100. Does it still run?",[bk("1.5 Implicit","simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html")]],
+  ["Symplectic Euler","Implement symplectic Euler. Plot the energy of all three integrators on one chart.",[]],
+  ["Particle systems","Baraff & Witkin: 'Particle System Dynamics' notes.",[L.bw]],
+  ["Review + Houdini link","Catch up. Note what substeps and constraint iterations really trade off in Vellum and POPs.",[]],
+ ]},
+ { t:"Simulation as optimization", g:"Implicit Euler = minimizing an energy. Newton's method and line search.", d:[
+  ["Optimization time integrator","Book 2.1: an implicit step equals minimizing the incremental potential.",[bk("2.1","simulation-with-optimization/optimization-framework/opt_time_integration.html")]],
+  ["Newton's method","Code: minimize the Rosenbrock function with Newton in 2D. Print the iteration count.",[]],
+  ["Convergence & line search","Book 3.1–3.2. Add backtracking line search to your Newton solver.",[bk("3.1","simulation-with-optimization/projected-newton/conv_issue_Newton.html"),bk("3.2","simulation-with-optimization/projected-newton/line_search.html")]],
+  ["Gradient descent vs Newton","Book 3.3. Compare iteration counts on the same problem.",[bk("3.3","simulation-with-optimization/projected-newton/grad_based_opt.html")]],
+  ["Boundary, contact, friction overview","Book 2.2–2.5. Skim for the big picture; mastery comes later.",[bk("2.2","simulation-with-optimization/optimization-framework/dirichlet_BC.html"),bk("2.3","simulation-with-optimization/optimization-framework/contact.html"),bk("2.4","simulation-with-optimization/optimization-framework/friction.html")]],
+  ["Rebuild your spring","Rewrite your implicit spring as: minimize ½‖x − x̃‖²_M + h²E(x) with your Newton solver and line search.",[]],
+  ["Review","Catch up. Explain to yourself, out loud, why this formulation is stable.",[]],
+ ]},
+ { t:"Case study: 2D mass-spring", g:"Run, read and break the book's first real simulator.", d:[
+  ["Ch.4 setup","Read 4.1–4.2. Get the book's Python code for this chapter running.",[bk("4 Mass-spring","simulation-with-optimization/case-study-2d-mass-spring/2d_mass_spring.html"),bk("4.2 Inertia","simulation-with-optimization/case-study-2d-mass-spring/inertia.html")]],
+  ["Mass-spring energy","Read 4.3 and compare it with your own derivation from week 2.",[bk("4.3","simulation-with-optimization/case-study-2d-mass-spring/mass_spring_energy.html")]],
+  ["Trace the integrator","Read 4.4. Add prints and trace one Newton iteration end to end.",[bk("4.4","simulation-with-optimization/case-study-2d-mass-spring/opt_time_integrator.html")]],
+  ["Break it","Read 4.5 and run the visualization. Change stiffness and timestep, and write down what breaks and when.",[bk("4.5","simulation-with-optimization/case-study-2d-mass-spring/sim_with_vis.html")]],
+  ["Make it yours","Turn it into a grid 'cloth' and pin two top corners (a crude version; proper boundaries come next week).",[]],
+  ["GPU (optional)","Skim 4.6 on GPU acceleration. No need to run it.",[bk("4.6","simulation-with-optimization/case-study-2d-mass-spring/gpu_accel.html")]],
+  ["Review","Save a GIF of your sim and a short note on what you learned.",[]],
+ ]},
+ { t:"Boundaries & contact (the IPC core)", g:"Pinning, barriers and penetration-free line search.", d:[
+  ["Dirichlet BCs","Book 5.1–5.2: equality constraints vs DOF elimination.",[bk("5.1","boundary-treatments/dirichlet-boundary-conditions/equality_constraints.html"),bk("5.2","boundary-treatments/dirichlet-boundary-conditions/DOF_elimin.html")]],
+  ["Hanging square","Book 5.3. Run it, then change which vertices are pinned.",[bk("5.3","boundary-treatments/dirichlet-boundary-conditions/hanging_square.html")]],
+  ["Distance barrier","Book 7.1–7.2: signed distances and the barrier. This is the core idea of IPC.",[bk("7.1","boundary-treatments/distance-barrier-for-nonpenetration/signed_dists.html"),bk("7.2","boundary-treatments/distance-barrier-for-nonpenetration/dist_barrier_formulation.html")]],
+  ["Barrier accuracy","Book 7.3. Plot the barrier function for a few values of d̂.",[bk("7.3","boundary-treatments/distance-barrier-for-nonpenetration/sol_accuracy.html")]],
+  ["Filter line search","Book 8.1–8.2: tunneling and penetration-free trajectories.",[bk("8.1","boundary-treatments/filter-line-search/tunneling.html"),bk("8.2","boundary-treatments/filter-line-search/nonpenetration_traj.html")]],
+  ["Square drop","Book 8.3. Run it, then vary the drop height and timestep. Does it ever penetrate?",[bk("8.3","boundary-treatments/filter-line-search/square_drop.html")]],
+  ["Review","Catch up and update your notes.",[]],
+ ]},
+ { t:"Friction & elasticity", g:"Friction, the deformation gradient F, and inversion-free FEM.", d:[
+  ["Frictional contact","Book 9.1–9.2.",[bk("9.1","boundary-treatments/frictional-contact/smooth_fric.html"),bk("9.2","boundary-treatments/frictional-contact/semi_imp_fric.html")]],
+  ["Square on slope","Book ch.10. Run it and vary μ. Find where it starts to slide.",[bk("10","boundary-treatments/case-study-square-on-slope/square_on_slope.html")]],
+  ["Deformation gradient F","Book ch.12. Connect it to rig deformation: F is the local transform, just like a skinning matrix.",[bk("12.2","hyperelasticity/kinematics-theory/deformation.html")]],
+  ["Rotation invariance & SVD","Book 13.1–13.2.",[bk("13.1","hyperelasticity/strain-energy/rigid_null_rot_inv.html"),bk("13.2","hyperelasticity/strain-energy/polar_svd.html")]],
+  ["Invertibility","Book 13.3: det F ≤ 0 means an inverted element. Remember day 3!",[bk("13.3","hyperelasticity/strain-energy/simp_model_inversion.html")]],
+  ["Inversion-free elasticity","Book ch.15. Run the case study.",[bk("15","hyperelasticity/case-study-inversion-free-elasticity/inv_free_elasticity.html")]],
+  ["Review","Catch up. Skim ch.14 (stress) only if you have time.",[bk("14","hyperelasticity/stress-and-its-derivatives/stress_and_derivatives.html")]],
+ ]},
+ { t:"Research mode", g:"Read papers, connect to your FX and rigging work, and get ready for class.", d:[
+  ["PBD & XPBD","Book ch.32, the method family behind Houdini Vellum. Compare it with the optimization approach: what does each give up?",[bk("32","position-based-simulations/position-based-dynamics-pbd/position_based_dynamics.html"),bk("32.5 XPBD","position-based-simulations/position-based-dynamics-pbd/stiffness_damping.html")]],
+  ["IPC paper, pass 1","Read the abstract, introduction and every figure.",[L.ipc]],
+  ["IPC paper, pass 2","Skim the method section. Write a 5-bullet summary as if you were presenting it.",[L.ipc]],
+  ["Pick papers to present","Browse recent physics papers from top graphics venues and shortlist 2 you'd like to present.",[L.course]],
+  ["Project ideas","Write down 3 project ideas tied to rigging and FX, e.g. sim-driven secondary motion on a rig, XPBD vs IPC on a character, collision-aware skinning.",[]],
+  ["Intro email draft","Draft a short note to Prof. Li: your background, interest, and top project idea. Review the course page.",[L.course]],
+  ["Ready for class","Final cheat-sheet pass. Plan your first week of class.",[]],
+ ]},
+];
+const TASKS = WEEKS.flatMap((w,wi)=>w.d.map((d,di)=>({id:wi*7+di+1,week:wi+1,title:d[0],what:d[1],links:d[2]})));
+const N = TASKS.length;
+
+const KEY = "sim763prep.v1";
+const DEFAULT_START = "2026-11-16";
+const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null } catch { return null } };
+let S = load() || { start: DEFAULT_START, done: {}, log: [] };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch {} };
+
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d) };
+const todayStr = () => ymd(new Date());
+const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate()+n); return ymd(d) };
+const diffDays = (a, b) => Math.round((parse(b) - parse(a)) / 864e5);
+const fmt = s => parse(s).toLocaleDateString(undefined, {month:"short", day:"numeric"});
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const linkHTML = links => links.length ? `<div class="links">${links.map(([l,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join("")}</div>` : "";
+
+function minutesByDay(){
+  const m = {};
+  for (const e of S.log) m[e.date] = (m[e.date]||0) + (Number(e.minutes)||0);
+  return m;
+}
+function streak(){
+  const days = new Set(S.log.map(e=>e.date));
+  let d = todayStr(), n = 0;
+  if (!days.has(d)) d = addDays(d,-1);
+  while (days.has(d)) { n++; d = addDays(d,-1) }
+  return n;
+}
+const nextTask = () => TASKS.find(t => !S.done[t.id]);
+
+function renderStats(){
+  const done = Object.keys(S.done).length;
+  const mins = S.log.reduce((a,e)=>a+(Number(e.minutes)||0),0);
+  document.getElementById("sDone").textContent = `${done}/${N}`;
+  document.getElementById("sStreak").textContent = streak();
+  document.getElementById("sHours").textContent = (mins/60).toFixed(mins%60===0?0:1) + "h";
+  const end = addDays(S.start, N-1), left = diffDays(todayStr(), end);
+  const sl = document.getElementById("sLeft"), lbl = document.getElementById("sLeftLbl");
+  if (diffDays(S.start, todayStr()) < 0) { sl.textContent = -diffDays(S.start, todayStr()); lbl.textContent = "days until start" }
+  else { sl.textContent = Math.max(0,left); lbl.textContent = "days left in plan" }
+  document.getElementById("pBar").style.width = (done/N*100) + "%";
+}
+
+function renderToday(){
+  const el = document.getElementById("today");
+  const t = nextTask();
+  const today = todayStr();
+  const checkedToday = S.log.some(e=>e.date===today);
+  if (!t) {
+    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-763. Go send that intro email.</p>`;
+    return;
+  }
+  const planDay = diffDays(S.start, today) + 1;
+  const done = Object.keys(S.done).length;
+  let pace = "";
+  if (planDay >= 1) {
+    const delta = done - Math.min(planDay - (checkedToday?0:1), N);
+    pace = delta > 0 ? `<p class="pace ahead">${delta} session${delta>1?"s":""} ahead of schedule</p>`
+         : delta < 0 ? `<p class="pace behind">${-delta} session${delta<-1?"s":""} behind. Review days are good for catching up.</p>`
+         : `<p class="pace">Right on schedule</p>`;
+  }
+  const opts = TASKS.filter(x=>!S.done[x.id]).map(x=>`<option value="${x.id}" ${x.id===t.id?"selected":""}>Day ${x.id} · ${esc(x.title)}</option>`).join("");
+  el.innerHTML = `
+    ${checkedToday ? `<div class="done-msg">✓ Checked in today. You can log another session if you're on a roll.</div>` : ""}
+    <div class="eyebrow">Week ${t.week} · Day ${t.id} of ${N} · ${esc(WEEKS[t.week-1].t)}</div>
+    <h2>${esc(t.title)}</h2>
+    <p class="what">${esc(t.what)}</p>
+    ${linkHTML(t.links)}
+    ${pace}
+    <form class="checkin" id="ciForm">
+      <div><label for="ciMin">Minutes</label><input id="ciMin" type="number" min="5" max="600" step="5" value="60"></div>
+      <div><label for="ciTask">Session</label><select id="ciTask">${opts}</select></div>
+      <div class="row-full"><label for="ciNote">Note (what clicked, what didn't)</label><textarea id="ciNote" placeholder="Optional"></textarea></div>
+      <div class="row-full"><button class="primary" type="submit">Check in for ${fmt(today)}</button></div>
+    </form>`;
+  document.getElementById("ciForm").onsubmit = e => {
+    e.preventDefault();
+    const id = Number(document.getElementById("ciTask").value);
+    const minutes = Math.max(0, Number(document.getElementById("ciMin").value)||0);
+    const note = document.getElementById("ciNote").value.trim();
+    S.done[id] = today;
+    S.log.unshift({date: today, task: id, minutes, note, at: Date.now()});
+    save(); renderAll();
+  };
+}
+
+function renderHeat(){
+  const el = document.getElementById("heat");
+  const m = minutesByDay(), today = todayStr();
+  const lvl = v => !v ? "" : v < 30 ? "l1" : v < 60 ? "l2" : "l3";
+  let h = "";
+  for (let w = 0; w < 8; w++) {
+    h += `<div class="lbl">W${w+1}</div>`;
+    for (let d = 0; d < 7; d++) {
+      const day = addDays(S.start, w*7+d);
+      const cls = ["cell", lvl(m[day]), day===today?"today":"", diffDays(today, day)>0?"future":""].join(" ");
+      h += `<div class="${cls}" title="${fmt(day)}${m[day]?` · ${m[day]} min`:""}"><span>${parse(day).getDate()}</span></div>`;
+    }
+  }
+  el.innerHTML = h;
+}
+
+function renderWeeks(){
+  const el = document.getElementById("weeks");
+  const openWeek = (nextTask()||{}).week;
+  el.innerHTML = WEEKS.map((w,wi)=>{
+    const ts = TASKS.filter(t=>t.week===wi+1);
+    const c = ts.filter(t=>S.done[t.id]).length;
+    return `<details class="week" ${wi+1===openWeek?"open":""}>
+      <summary><span class="t">Week ${wi+1} · ${esc(w.t)}</span><span class="c">${fmt(addDays(S.start,wi*7))} · ${c}/7</span></summary>
+      <p class="goal">${esc(w.g)}</p>
+      ${ts.map(t=>`<div class="task ${S.done[t.id]?"is-done":""}">
+        <input type="checkbox" data-id="${t.id}" ${S.done[t.id]?"checked":""} aria-label="Mark day ${t.id} done">
+        <div><div class="tt"><small>D${t.id}</small>${esc(t.title)}</div><p>${esc(t.what)}</p>${linkHTML(t.links)}
+        ${S.done[t.id]?`<div class="when">done ${fmt(S.done[t.id])}</div>`:""}</div></div>`).join("")}
+    </details>`;
+  }).join("");
+  el.querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => {
+    const id = Number(cb.dataset.id);
+    if (cb.checked) S.done[id] = todayStr(); else delete S.done[id];
+    save(); renderAll();
+  });
+}
+
+function renderLog(){
+  const el = document.getElementById("log");
+  if (!S.log.length) { el.innerHTML = `<li class="n">No check-ins yet. Your first one is above.</li>`; return }
+  el.innerHTML = S.log.map((e,i)=>{
+    const t = TASKS.find(x=>x.id===e.task);
+    return `<li><div class="d">${fmt(e.date)} · ${e.minutes} min · <a href="#" data-del="${i}">remove</a></div>
+      <div>Day ${e.task} · ${esc(t?t.title:"")}</div>${e.note?`<div class="n">${esc(e.note)}</div>`:""}</li>`;
+  }).join("");
+  el.querySelectorAll("[data-del]").forEach(a => a.onclick = ev => {
+    ev.preventDefault();
+    const e = S.log[Number(a.dataset.del)];
+    if (!confirm(`Remove the ${fmt(e.date)} check-in? The session will be marked not done.`)) return;
+    S.log.splice(Number(a.dataset.del),1);
+    if (!S.log.some(x=>x.task===e.task)) delete S.done[e.task];
+    save(); renderAll();
+  });
+}
+
+function renderAll(){ renderStats(); renderToday(); renderHeat(); renderWeeks(); renderLog(); document.getElementById("startDate").value = S.start }
+
+document.getElementById("startDate").onchange = e => { if (e.target.value) { S.start = e.target.value; save(); renderAll() } };
+document.getElementById("btnExport").onclick = () => {
+  const blob = new Blob([JSON.stringify(S,null,2)], {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `763-prep-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
+};
+document.getElementById("btnImport").onclick = () => document.getElementById("fileIn").click();
+document.getElementById("fileIn").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { const d = JSON.parse(await f.text()); if (!d.start || !d.done || !d.log) throw 0; S = d; save(); renderAll(); alert("Progress imported.") }
+  catch { alert("That file doesn't look like a progress export.") }
+  e.target.value = "";
+};
+document.getElementById("btnReset").onclick = () => {
+  if (confirm("Erase all check-ins and progress on this device?")) { S = {start: DEFAULT_START, done:{}, log:[]}; save(); renderAll() }
+};
+renderAll();
+</script>
+</body>
+</html>
