@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>15-763 Prep · Daily Check-in</title>
 <meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 15-763 Physics-based Animation of Solids and Fluids.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#d4552b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -239,9 +243,10 @@ const TASKS = WEEKS.flatMap((w,wi)=>w.d.map((d,di)=>({id:wi*7+di+1,week:wi+1,tit
 const N = TASKS.length;
 
 const KEY = "sim763prep.v1";
-const DEFAULT_START = "2026-11-16";
+const DEFAULT_START = "2026-11-20";
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null } catch { return null } };
 let S = load() || { start: DEFAULT_START, done: {}, log: [] };
+if (S.start === "2026-11-16") { S.start = DEFAULT_START; }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch {} };
 
 const pad = n => String(n).padStart(2,"0");
@@ -399,6 +404,7 @@ document.getElementById("btnReset").onclick = () => {
   if (confirm("Erase all check-ins and progress on this device?")) { S = {start: DEFAULT_START, done:{}, log:[]}; save(); renderAll() }
 };
 renderAll();
+if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 </script>
 </body>
 </html>
