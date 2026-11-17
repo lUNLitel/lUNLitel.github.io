@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>15-763 Prep · Daily Check-in</title>
-<meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 15-763 Physics-based Animation of Solids and Fluids.">
+<title>15-662 Prep · Daily Check-in</title>
+<meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 15-662 Computer Graphics.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d4552b">
 <link rel="icon" href="icon-192.png">
@@ -109,9 +109,9 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">CMU 15-763 · Spring 2027 · Prep</div>
-    <h1>One hour a day toward<br>physics-based animation</h1>
-    <p>An 8-week plan: linear algebra → calculus → time integration → optimization → Minchen Li's <em>Physics-Based Simulation</em> book → research mode.</p>
+    <div class="eyebrow">CMU 15-662 · Spring 2027 · Prep</div>
+    <h1>One hour a day toward<br>building your own 3D package</h1>
+    <p>An 8-week plan: C++ → graphics math → rasterizer → half-edge meshes → ray tracer → animation → Scotty3D.</p>
   </header>
 
   <section class="stats" aria-label="Progress">
@@ -148,105 +148,105 @@
     <p class="note">Progress is saved in this browser only. To move it to another device, export here and import there.</p>
   </div>
 
-  <footer>Course: <a href="https://www.cs.cmu.edu/~15763-s26/">15-763 course page</a> · Book: <a href="https://phys-sim-book.github.io/">phys-sim-book.github.io</a></footer>
+  <footer>Course: <a href="https://15462.courses.cs.cmu.edu/fall2022">15-462/662 course site</a> · Code: <a href="https://github.com/CMU-Graphics/Scotty3D">Scotty3D</a></footer>
 </div>
 
 <script>
-const B = "https://phys-sim-book.github.io/";
 const L = {
+  cpp: ["learncpp.com", "https://www.learncpp.com/"],
+  cmake: ["CMake tutorial", "https://cmake.org/cmake/help/latest/guide/tutorial/index.html"],
   eola: ["Essence of Linear Algebra", "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab"],
   khan: ["Khan Academy: Multivariable calculus", "https://www.khanacademy.org/math/multivariable-calculus"],
-  bw: ["Baraff & Witkin course notes", "https://www.cs.cmu.edu/~baraff/sigcourse/"],
-  numpy: ["NumPy quickstart", "https://numpy.org/doc/stable/user/quickstart.html"],
-  scipy: ["scipy.sparse", "https://docs.scipy.org/doc/scipy/reference/sparse.html"],
-  ipc: ["IPC project page", "https://ipc-sim.github.io/"],
-  course: ["15-763 course page", "https://www.cs.cmu.edu/~15763-s26/"],
-  book: ["Book home", B],
+  sap: ["Scratchapixel", "https://www.scratchapixel.com/"],
+  tiny: ["tinyrenderer", "https://github.com/ssloy/tinyrenderer/wiki"],
+  rt1: ["Ray Tracing in One Weekend", "https://raytracing.github.io/books/RayTracingInOneWeekend.html"],
+  rt2: ["Ray Tracing: The Next Week", "https://raytracing.github.io/books/RayTracingTheNextWeek.html"],
+  s3d: ["Scotty3D on GitHub", "https://github.com/CMU-Graphics/Scotty3D"],
+  s3ddocs: ["Scotty3D docs", "https://cmu-graphics.github.io/Scotty3D-docs/"],
+  course: ["15-462/662 course site", "https://15462.courses.cs.cmu.edu/fall2022"],
 };
-const bk = (label, path) => [label, B + path];
 
 const WEEKS = [
- { t:"Linear algebra intuition", g:"See matrices as transformations, and get comfortable with NumPy.", d:[
-  ["Set up + vectors","Set up Python with NumPy and Matplotlib (a venv or Jupyter). Watch the first two Essence of Linear Algebra videos: vectors, span and basis.",[L.eola,L.numpy]],
-  ["Transformations","Watch the videos on linear transformations and matrix multiplication. Code: apply a 2×2 matrix to a grid of points and plot before and after.",[L.eola]],
-  ["Determinant & inverse","Watch the videos on the determinant and on inverse, column space and null space. Code: compute det of a few 2D deformation matrices. What does det < 0 look like? (You'll see this again as 'element inversion'.)",[L.eola]],
-  ["Dot & cross products","Watch the dot product and cross product videos. Code: compute a triangle's area and normal from its 3 vertices.",[L.eola]],
-  ["Change of basis & eigenvectors","Watch the change of basis and eigenvector videos. Connect it: a joint's orient is a change of basis. Code: np.linalg.eig on a symmetric matrix and plot the eigenvectors.",[L.eola]],
-  ["Solving Ax = b","Why solve() beats inv(). Build a 1D Laplacian (tridiagonal) with scipy.sparse and solve it. Every simulator step comes down to this.",[L.scipy]],
-  ["Review + cheat sheet","Catch up if behind. Write a one-page cheat sheet: transform, det, inverse, eigen, solve.",[]],
+ { t:"C++ foundations", g:"Get comfortable writing and compiling small C++ programs.", d:[
+  ["Setup","Install a C++ compiler, CMake and an IDE (VS Code + C/C++ extension, or CLion). Build and run hello world from the terminal.",[L.cpp,L.cmake]],
+  ["Types, functions, references","learncpp: variables, functions, and references. Write a function that swaps two numbers by reference.",[L.cpp]],
+  ["Pointers & memory","learncpp: pointers, the address-of operator, new/delete. Draw a box-and-arrow diagram of what each line does.",[L.cpp]],
+  ["Classes","learncpp: classes, constructors, member functions. Write a Joint class with a name, a parent pointer and a local transform.",[L.cpp]],
+  ["Operator overloading","Write a Vec3 class with +, -, scalar *, dot() and cross(). You'll use it for the rest of the plan.",[L.cpp]],
+  ["The STL","std::vector, std::unordered_map, range-for loops. Store your Joints in a vector and print the hierarchy.",[L.cpp]],
+  ["Review","Catch up. Rewrite the joint hierarchy without looking at your old code.",[]],
  ]},
- { t:"Multivariable calculus & energies", g:"Gradients, Jacobians, Hessians, and checking derivatives numerically.", d:[
-  ["Gradients","Partial derivatives, gradient and directional derivative. Code: plot contours of f(x,y) with gradient arrows on top.",[L.khan]],
-  ["Jacobians","The Jacobian as the local linear map. Code: a finite-difference Jacobian of a 2D map, compared with the analytic one.",[L.khan]],
-  ["Hessian & Taylor","The Hessian and the 2nd-order Taylor approximation. This is what Newton's method uses.",[L.khan]],
-  ["Spring energy: gradient","E = ½k(‖x₁−x₂‖ − L)². Derive ∂E/∂x by hand, then verify with finite differences. A gradient check is your #1 debugging tool.",[]],
-  ["Spring energy: Hessian","Derive the Hessian (the 2×2 blocks), then verify it with finite differences of your gradient.",[]],
-  ["Positive definiteness","Eigenvalues of the spring Hessian when stretched vs compressed. Notice negative ones when compressed: that's why 'projected Newton' exists.",[]],
-  ["Review","Catch up. Add derivatives and gradient checking to your cheat sheet.",[]],
+ { t:"C++ for a real codebase", g:"The habits Scotty3D needs: headers, builds, debugging, linked structures.", d:[
+  ["Headers & multiple files","Split Vec3 into a .h and .cpp. Build both with a CMakeLists.txt.",[L.cmake]],
+  ["Use a debugger","Set breakpoints, step through code, inspect variables. Plant a bug in Vec3 and find it with the debugger only.",[]],
+  ["const and passing by reference","When to use const T&, const member functions. Fix every const warning in your Vec3.",[L.cpp]],
+  ["Smart pointers & RAII","std::unique_ptr and std::shared_ptr. Rebuild the joint tree so nothing leaks.",[L.cpp]],
+  ["Iterators & std::list","Scotty3D's half-edge mesh is built on list iterators. Practise inserting and erasing from a std::list while holding iterators.",[L.cpp]],
+  ["Templates (basics)","Function and class templates. Write a template lerp(a, b, t) that works for floats and Vec3.",[L.cpp]],
+  ["Review + Mat4","Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[]],
  ]},
- { t:"Time integration", g:"Explicit vs implicit, and why stiff springs explode.", d:[
-  ["ODE basics","Baraff & Witkin: 'Differential Equation Basics' notes.",[L.bw]],
-  ["Book ch.1 (1.1–1.3)","Solid representations, Newton's second law, time integration.",[bk("1.1 Solid geometry","simulation-with-optimization/discrete-space-and-time/solid_rep.html"),bk("1.3 Time integration","simulation-with-optimization/discrete-space-and-time/time_integration.html")]],
-  ["Explicit Euler","Read 1.4. Code: a mass on a spring with forward Euler. Plot energy over time and watch it grow.",[bk("1.4 Explicit","simulation-with-optimization/discrete-space-and-time/explicit_time_integration.html")]],
-  ["Implicit Euler","Read 1.5. Code: backward Euler for the same spring. Raise the stiffness ×100. Does it still run?",[bk("1.5 Implicit","simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html")]],
-  ["Symplectic Euler","Implement symplectic Euler. Plot the energy of all three integrators on one chart.",[]],
-  ["Particle systems","Baraff & Witkin: 'Particle System Dynamics' notes.",[L.bw]],
-  ["Review + Houdini link","Catch up. Note what substeps and constraint iterations really trade off in Vellum and POPs.",[]],
+ { t:"Math for graphics", g:"The linear algebra and calculus the course assumes.", d:[
+  ["Vectors, dot, cross","Essence of Linear Algebra: vectors and the dot/cross product videos. Compute a triangle's normal and area with your Vec3.",[L.eola]],
+  ["Matrices as transforms","Videos on linear transformations and matrix multiplication. Apply scale, rotate and shear to a set of points.",[L.eola]],
+  ["Homogeneous coordinates","Why 4x4 matrices: translation as a matrix. Build a model-to-world transform from translate × rotate × scale. Check the order matters.",[L.sap]],
+  ["Rotations","Euler angles vs axis-angle vs quaternions (your rigging gimbal-lock knowledge applies). Implement axis-angle to matrix.",[L.sap]],
+  ["Barycentric coordinates","Express a point inside a triangle as a weighted sum of corners. Write a function that returns the weights.",[L.sap]],
+  ["Derivatives refresher","Gradients and partial derivatives. You'll need them for IK and simulation.",[L.khan]],
+  ["Review","Catch up and write a one-page cheat sheet of transforms and formulas.",[]],
  ]},
- { t:"Simulation as optimization", g:"Implicit Euler = minimizing an energy. Newton's method and line search.", d:[
-  ["Optimization time integrator","Book 2.1: an implicit step equals minimizing the incremental potential.",[bk("2.1","simulation-with-optimization/optimization-framework/opt_time_integration.html")]],
-  ["Newton's method","Code: minimize the Rosenbrock function with Newton in 2D. Print the iteration count.",[]],
-  ["Convergence & line search","Book 3.1–3.2. Add backtracking line search to your Newton solver.",[bk("3.1","simulation-with-optimization/projected-newton/conv_issue_Newton.html"),bk("3.2","simulation-with-optimization/projected-newton/line_search.html")]],
-  ["Gradient descent vs Newton","Book 3.3. Compare iteration counts on the same problem.",[bk("3.3","simulation-with-optimization/projected-newton/grad_based_opt.html")]],
-  ["Boundary, contact, friction overview","Book 2.2–2.5. Skim for the big picture; mastery comes later.",[bk("2.2","simulation-with-optimization/optimization-framework/dirichlet_BC.html"),bk("2.3","simulation-with-optimization/optimization-framework/contact.html"),bk("2.4","simulation-with-optimization/optimization-framework/friction.html")]],
-  ["Rebuild your spring","Rewrite your implicit spring as: minimize ½‖x − x̃‖²_M + h²E(x) with your Newton solver and line search.",[]],
-  ["Review","Catch up. Explain to yourself, out loud, why this formulation is stable.",[]],
+ { t:"Rasterization", g:"A tiny version of the course's first assignment.", d:[
+  ["Write an image file","Write a program that outputs a gradient as a .ppm image. Open it in an image viewer.",[L.tiny]],
+  ["Draw lines","Implement a line-drawing algorithm (Bresenham) and draw a wireframe triangle.",[L.tiny]],
+  ["Fill triangles","Fill a triangle by testing each pixel with edge functions.",[L.tiny,L.sap]],
+  ["Interpolate colours","Use barycentric weights to blend colours across the triangle.",[L.sap]],
+  ["Depth buffer","Draw two overlapping triangles correctly with a z-buffer.",[L.tiny]],
+  ["Antialiasing","Supersample (several samples per pixel) and average. Compare jaggies before and after.",[L.sap]],
+  ["Review","Catch up. Render a simple OBJ model as a wireframe or filled mesh.",[L.tiny]],
  ]},
- { t:"Case study: 2D mass-spring", g:"Run, read and break the book's first real simulator.", d:[
-  ["Ch.4 setup","Read 4.1–4.2. Get the book's Python code for this chapter running.",[bk("4 Mass-spring","simulation-with-optimization/case-study-2d-mass-spring/2d_mass_spring.html"),bk("4.2 Inertia","simulation-with-optimization/case-study-2d-mass-spring/inertia.html")]],
-  ["Mass-spring energy","Read 4.3 and compare it with your own derivation from week 2.",[bk("4.3","simulation-with-optimization/case-study-2d-mass-spring/mass_spring_energy.html")]],
-  ["Trace the integrator","Read 4.4. Add prints and trace one Newton iteration end to end.",[bk("4.4","simulation-with-optimization/case-study-2d-mass-spring/opt_time_integrator.html")]],
-  ["Break it","Read 4.5 and run the visualization. Change stiffness and timestep, and write down what breaks and when.",[bk("4.5","simulation-with-optimization/case-study-2d-mass-spring/sim_with_vis.html")]],
-  ["Make it yours","Turn it into a grid 'cloth' and pin two top corners (a crude version; proper boundaries come next week).",[]],
-  ["GPU (optional)","Skim 4.6 on GPU acceleration. No need to run it.",[bk("4.6","simulation-with-optimization/case-study-2d-mass-spring/gpu_accel.html")]],
-  ["Review","Save a GIF of your sim and a short note on what you learned.",[]],
+ { t:"Meshes & the half-edge", g:"The data structure behind every mesh-editing tool you use in Maya.", d:[
+  ["Mesh representations","Vertex list + face list vs half-edge. Why bevel and subdivide need neighbour information.",[L.s3ddocs]],
+  ["Half-edge on paper","Draw a two-triangle mesh. Label every half-edge with its twin, next, vertex, edge and face.",[]],
+  ["Build a half-edge mesh","Write classes for Vertex, Edge, HalfEdge, Face. Build one from a tiny OBJ.",[L.cpp]],
+  ["Traversal","Loop around a vertex to list its neighbours. Print each vertex's valence.",[]],
+  ["Edge flip","Implement edge flip on your two-triangle mesh. Check every pointer afterwards.",[L.s3ddocs]],
+  ["Edge split","Implement edge split. Write a validity checker that walks the whole mesh.",[L.s3ddocs]],
+  ["Review","Read about Loop subdivision and how split + flip combine to do it.",[L.course]],
  ]},
- { t:"Boundaries & contact (the IPC core)", g:"Pinning, barriers and penetration-free line search.", d:[
-  ["Dirichlet BCs","Book 5.1–5.2: equality constraints vs DOF elimination.",[bk("5.1","boundary-treatments/dirichlet-boundary-conditions/equality_constraints.html"),bk("5.2","boundary-treatments/dirichlet-boundary-conditions/DOF_elimin.html")]],
-  ["Hanging square","Book 5.3. Run it, then change which vertices are pinned.",[bk("5.3","boundary-treatments/dirichlet-boundary-conditions/hanging_square.html")]],
-  ["Distance barrier","Book 7.1–7.2: signed distances and the barrier. This is the core idea of IPC.",[bk("7.1","boundary-treatments/distance-barrier-for-nonpenetration/signed_dists.html"),bk("7.2","boundary-treatments/distance-barrier-for-nonpenetration/dist_barrier_formulation.html")]],
-  ["Barrier accuracy","Book 7.3. Plot the barrier function for a few values of d̂.",[bk("7.3","boundary-treatments/distance-barrier-for-nonpenetration/sol_accuracy.html")]],
-  ["Filter line search","Book 8.1–8.2: tunneling and penetration-free trajectories.",[bk("8.1","boundary-treatments/filter-line-search/tunneling.html"),bk("8.2","boundary-treatments/filter-line-search/nonpenetration_traj.html")]],
-  ["Square drop","Book 8.3. Run it, then vary the drop height and timestep. Does it ever penetrate?",[bk("8.3","boundary-treatments/filter-line-search/square_drop.html")]],
-  ["Review","Catch up and update your notes.",[]],
+ { t:"Ray tracing", g:"A path-tracer warm-up, plus the BVH that makes it fast.", d:[
+  ["Rays & image","Ray Tracing in One Weekend: output an image, vec3 and ray classes (compare with your own Vec3).",[L.rt1]],
+  ["Spheres & normals","Ray-sphere intersection and surface normals.",[L.rt1]],
+  ["Antialiasing & diffuse","Multiple samples per pixel and diffuse (Lambertian) bounces.",[L.rt1]],
+  ["Materials","Metal and glass materials. Notice the randomness: this is Monte Carlo rendering.",[L.rt1]],
+  ["Camera","A positionable camera with field of view and depth of field.",[L.rt1]],
+  ["BVH","Ray Tracing: The Next Week, the BVH chapter. Why a tree of boxes makes rendering fast.",[L.rt2]],
+  ["Review","Render your final scene. Time it with and without a BVH if you got that far.",[]],
  ]},
- { t:"Friction & elasticity", g:"Friction, the deformation gradient F, and inversion-free FEM.", d:[
-  ["Frictional contact","Book 9.1–9.2.",[bk("9.1","boundary-treatments/frictional-contact/smooth_fric.html"),bk("9.2","boundary-treatments/frictional-contact/semi_imp_fric.html")]],
-  ["Square on slope","Book ch.10. Run it and vary μ. Find where it starts to slide.",[bk("10","boundary-treatments/case-study-square-on-slope/square_on_slope.html")]],
-  ["Deformation gradient F","Book ch.12. Connect it to rig deformation: F is the local transform, just like a skinning matrix.",[bk("12.2","hyperelasticity/kinematics-theory/deformation.html")]],
-  ["Rotation invariance & SVD","Book 13.1–13.2.",[bk("13.1","hyperelasticity/strain-energy/rigid_null_rot_inv.html"),bk("13.2","hyperelasticity/strain-energy/polar_svd.html")]],
-  ["Invertibility","Book 13.3: det F ≤ 0 means an inverted element. Remember day 3!",[bk("13.3","hyperelasticity/strain-energy/simp_model_inversion.html")]],
-  ["Inversion-free elasticity","Book ch.15. Run the case study.",[bk("15","hyperelasticity/case-study-inversion-free-elasticity/inv_free_elasticity.html")]],
-  ["Review","Catch up. Skim ch.14 (stress) only if you have time.",[bk("14","hyperelasticity/stress-and-its-derivatives/stress_and_derivatives.html")]],
+ { t:"Animation", g:"Your home turf, now written in code: splines, skeletons, IK, skinning.", d:[
+  ["Splines","Implement a Catmull-Rom or Hermite spline and animate a point along it.",[L.course]],
+  ["Keyframe interpolation","Interpolate positions and rotations between keyframes. Use slerp for rotations.",[]],
+  ["Forward kinematics","Compute world positions of a 3-joint chain from local transforms (the Joint class from week 1).",[]],
+  ["Inverse kinematics","Implement 2D IK with CCD or gradient descent. Drag a target and watch the chain follow.",[L.khan]],
+  ["Linear blend skinning","Skin a 2D strip of vertices to two bones with weights. Watch the candy-wrapper artefact appear.",[]],
+  ["Particles","Simulate falling particles with forward Euler, then bounce off the ground.",[]],
+  ["Review","Catch up. Note which of these are in Scotty3D's animation assignment.",[L.s3ddocs]],
  ]},
- { t:"Research mode", g:"Read papers, connect to your FX and rigging work, and get ready for class.", d:[
-  ["PBD & XPBD","Book ch.32, the method family behind Houdini Vellum. Compare it with the optimization approach: what does each give up?",[bk("32","position-based-simulations/position-based-dynamics-pbd/position_based_dynamics.html"),bk("32.5 XPBD","position-based-simulations/position-based-dynamics-pbd/stiffness_damping.html")]],
-  ["IPC paper, pass 1","Read the abstract, introduction and every figure.",[L.ipc]],
-  ["IPC paper, pass 2","Skim the method section. Write a 5-bullet summary as if you were presenting it.",[L.ipc]],
-  ["Pick papers to present","Browse recent physics papers from top graphics venues and shortlist 2 you'd like to present.",[L.course]],
-  ["Project ideas","Write down 3 project ideas tied to rigging and FX, e.g. sim-driven secondary motion on a rig, XPBD vs IPC on a character, collision-aware skinning.",[]],
-  ["Intro email draft","Draft a short note to Prof. Li: your background, interest, and top project idea. Review the course page.",[L.course]],
-  ["Ready for class","Final cheat-sheet pass. Plan your first week of class.",[]],
+ { t:"Ready for Scotty3D", g:"Build the real codebase before day one.", d:[
+  ["Build Scotty3D","Clone and build Scotty3D on your machine. Fix any compiler or CMake issues now, not in week one of class.",[L.s3d]],
+  ["Tour the app","Use Scotty3D as an artist: model, render, animate. Note what feels like Maya and what doesn't.",[L.s3ddocs]],
+  ["Read the code","Find where meshes, the renderer and the animator live. Read the half-edge header.",[L.s3d]],
+  ["Private repo setup","Set up a private Git repo for your coursework. The course asks students not to publish solutions in a public fork.",[L.s3d]],
+  ["Course logistics","Read the course site: grading, late days, collaboration policy, how assignments are structured.",[L.course]],
+  ["Plan your weeks","Block time in your calendar around ETC project hours. Expect 12–17 hours a week on 662.",[]],
+  ["Ready for class","Final pass on your cheat sheet. Rest.",[]],
  ]},
 ];
 const TASKS = WEEKS.flatMap((w,wi)=>w.d.map((d,di)=>({id:wi*7+di+1,week:wi+1,title:d[0],what:d[1],links:d[2]})));
 const N = TASKS.length;
 
-const KEY = "sim763prep.v1";
+const KEY = "cg662prep.v1";
 const DEFAULT_START = "2026-11-20";
 const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null } catch { return null } };
 let S = load() || { start: DEFAULT_START, done: {}, log: [] };
-if (S.start === "2026-11-16") { S.start = DEFAULT_START; }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)) } catch {} };
 
 const pad = n => String(n).padStart(2,"0");
@@ -292,7 +292,7 @@ function renderToday(){
   const today = todayStr();
   const checkedToday = S.log.some(e=>e.date===today);
   if (!t) {
-    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-763. Go send that intro email.</p>`;
+    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-662. Go build Scotty3D.</p>`;
     return;
   }
   const planDay = diffDays(S.start, today) + 1;
@@ -391,7 +391,7 @@ document.getElementById("startDate").onchange = e => { if (e.target.value) { S.s
 document.getElementById("btnExport").onclick = () => {
   const blob = new Blob([JSON.stringify(S,null,2)], {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `763-prep-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
+  a.download = `662-prep-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
 };
 document.getElementById("btnImport").onclick = () => document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange = async e => {

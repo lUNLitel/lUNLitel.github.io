@@ -1,7 +1,7 @@
 {
-  "name": "15-763 Prep",
-  "short_name": "763 Prep",
-  "description": "Daily check-in for the 8-week 15-763 prep plan.",
+  "name": "15-662 Prep",
+  "short_name": "662 Prep",
+  "description": "Daily check-in for the 8-week 15-662 prep plan.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
