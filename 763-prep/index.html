@@ -111,7 +111,7 @@
   <header>
     <div class="eyebrow">CMU 15-662 · Spring 2027 · Prep</div>
     <h1>One hour a day toward<br>building your own 3D package</h1>
-    <p>An 8-week plan: C++ → graphics math → rasterizer → half-edge meshes → ray tracer → animation → Scotty3D.</p>
+    <p>An 8-week plan: C++ → linear algebra → vector calculus → rasterizer → half-edge meshes → ray tracer → animation → Scotty3D.</p>
   </header>
 
   <section class="stats" aria-label="Progress">
@@ -167,32 +167,32 @@ const L = {
 };
 
 const WEEKS = [
- { t:"C++ foundations", g:"Get comfortable writing and compiling small C++ programs.", d:[
-  ["Setup","Install a C++ compiler, CMake and an IDE (VS Code + C/C++ extension, or CLion). Build and run hello world from the terminal.",[L.cpp,L.cmake]],
-  ["Types, functions, references","learncpp: variables, functions, and references. Write a function that swaps two numbers by reference.",[L.cpp]],
-  ["Pointers & memory","learncpp: pointers, the address-of operator, new/delete. Draw a box-and-arrow diagram of what each line does.",[L.cpp]],
-  ["Classes","learncpp: classes, constructors, member functions. Write a Joint class with a name, a parent pointer and a local transform.",[L.cpp]],
-  ["Operator overloading","Write a Vec3 class with +, -, scalar *, dot() and cross(). You'll use it for the rest of the plan.",[L.cpp]],
-  ["The STL","std::vector, std::unordered_map, range-for loops. Store your Joints in a vector and print the hierarchy.",[L.cpp]],
-  ["Review","Catch up. Rewrite the joint hierarchy without looking at your old code.",[]],
+ { t:"C++ essentials", g:"Enough C++ to read, build and debug Scotty3D.", d:[
+  ["Setup + build","Install a C++ compiler, CMake and an IDE (VS Code or CLion). Build hello world with a CMakeLists.txt.",[L.cpp,L.cmake]],
+  ["References & pointers","learncpp: references, pointers, new/delete. Draw box-and-arrow diagrams of what each line does.",[L.cpp]],
+  ["Classes & Vec3","Write a Vec3 class with +, -, scalar *, dot() and cross(), split into .h and .cpp. You'll use it all plan long.",[L.cpp]],
+  ["The STL","std::vector and std::unordered_map, range-for loops. Store a joint hierarchy in a vector and print it.",[L.cpp]],
+  ["std::list & iterators","Scotty3D's half-edge mesh is built on list iterators. Insert and erase from a std::list while holding iterators.",[L.cpp]],
+  ["Debugger & smart pointers","Plant a bug in Vec3 and find it with breakpoints only. Then read up on unique_ptr / RAII.",[L.cpp]],
+  ["Mat4","Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[]],
  ]},
- { t:"C++ for a real codebase", g:"The habits Scotty3D needs: headers, builds, debugging, linked structures.", d:[
-  ["Headers & multiple files","Split Vec3 into a .h and .cpp. Build both with a CMakeLists.txt.",[L.cmake]],
-  ["Use a debugger","Set breakpoints, step through code, inspect variables. Plant a bug in Vec3 and find it with the debugger only.",[]],
-  ["const and passing by reference","When to use const T&, const member functions. Fix every const warning in your Vec3.",[L.cpp]],
-  ["Smart pointers & RAII","std::unique_ptr and std::shared_ptr. Rebuild the joint tree so nothing leaks.",[L.cpp]],
-  ["Iterators & std::list","Scotty3D's half-edge mesh is built on list iterators. Practise inserting and erasing from a std::list while holding iterators.",[L.cpp]],
-  ["Templates (basics)","Function and class templates. Write a template lerp(a, b, t) that works for floats and Vec3.",[L.cpp]],
-  ["Review + Mat4","Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[]],
+ { t:"Linear algebra", g:"The language of every transform, rig and renderer. Matches the course's Assignment 0.0.", d:[
+  ["Vectors, dot, cross","Essence of Linear Algebra: vectors, dot and cross product. Compute a triangle's normal and area with your Vec3.",[L.eola]],
+  ["Matrices as transforms","Videos on linear transformations and matrix multiplication. Apply scale, rotate and shear to points and plot them.",[L.eola]],
+  ["Determinant & inverse","What det means geometrically (area/volume, flips). When a matrix has no inverse. Check with your Mat4.",[L.eola]],
+  ["Change of basis","Coordinate frames, the same thing as joint orients and local vs world space in Maya. Convert a point between two frames.",[L.eola]],
+  ["Homogeneous coordinates","Why 4x4: translation as a matrix. Build translate × rotate × scale and show that the order changes the result.",[L.sap]],
+  ["Rotations","Euler angles vs axis-angle vs quaternions (gimbal lock again). Implement axis-angle to matrix.",[L.sap]],
+  ["Barycentric + review","Barycentric weights of a point in a triangle. Then write a one-page linear algebra cheat sheet.",[L.sap]],
  ]},
- { t:"Math for graphics", g:"The linear algebra and calculus the course assumes.", d:[
-  ["Vectors, dot, cross","Essence of Linear Algebra: vectors and the dot/cross product videos. Compute a triangle's normal and area with your Vec3.",[L.eola]],
-  ["Matrices as transforms","Videos on linear transformations and matrix multiplication. Apply scale, rotate and shear to a set of points.",[L.eola]],
-  ["Homogeneous coordinates","Why 4x4 matrices: translation as a matrix. Build a model-to-world transform from translate × rotate × scale. Check the order matters.",[L.sap]],
-  ["Rotations","Euler angles vs axis-angle vs quaternions (your rigging gimbal-lock knowledge applies). Implement axis-angle to matrix.",[L.sap]],
-  ["Barycentric coordinates","Express a point inside a triangle as a weighted sum of corners. Write a function that returns the weights.",[L.sap]],
-  ["Derivatives refresher","Gradients and partial derivatives. You'll need them for IK and simulation.",[L.khan]],
-  ["Review","Catch up and write a one-page cheat sheet of transforms and formulas.",[]],
+ { t:"Vector calculus & numerics", g:"Derivatives, integrals and the numerical tricks the course leans on. Matches Assignment 0.5.", d:[
+  ["Derivatives & gradients","Partial derivatives and the gradient. Plot contours of f(x, y) with gradient arrows.",[L.khan]],
+  ["Jacobians","The Jacobian as a local linear map. You'll need it for IK. Compute one by hand for a 2-joint arm.",[L.khan]],
+  ["Finite differences","Approximate a derivative numerically and use it to check a hand-derived gradient. Your #1 debugging tool for math code.",[]],
+  ["Optimization","Gradient descent and Newton's method on a 2D function. Print how fast each converges.",[L.khan]],
+  ["Integrals & Monte Carlo","Estimate an integral (e.g. the area of a circle) by random sampling. This is how path tracing works.",[L.khan]],
+  ["Time integration","Forward Euler on a spring. Watch the energy grow, then try symplectic Euler.",[]],
+  ["Review","Add calculus and numerics to your cheat sheet. Redo any day that didn't click.",[]],
  ]},
  { t:"Rasterization", g:"A tiny version of the course's first assignment.", d:[
   ["Write an image file","Write a program that outputs a gradient as a .ppm image. Open it in an image viewer.",[L.tiny]],
@@ -201,7 +201,7 @@ const WEEKS = [
   ["Interpolate colours","Use barycentric weights to blend colours across the triangle.",[L.sap]],
   ["Depth buffer","Draw two overlapping triangles correctly with a z-buffer.",[L.tiny]],
   ["Antialiasing","Supersample (several samples per pixel) and average. Compare jaggies before and after.",[L.sap]],
-  ["Review","Catch up. Render a simple OBJ model as a wireframe or filled mesh.",[L.tiny]],
+  ["Math: sampling & aliasing","Why jaggies and moiré happen: sampling, the Nyquist idea, filtering. Connect it to what you just saw.",[L.sap]],
  ]},
  { t:"Meshes & the half-edge", g:"The data structure behind every mesh-editing tool you use in Maya.", d:[
   ["Mesh representations","Vertex list + face list vs half-edge. Why bevel and subdivide need neighbour information.",[L.s3ddocs]],
@@ -210,33 +210,33 @@ const WEEKS = [
   ["Traversal","Loop around a vertex to list its neighbours. Print each vertex's valence.",[]],
   ["Edge flip","Implement edge flip on your two-triangle mesh. Check every pointer afterwards.",[L.s3ddocs]],
   ["Edge split","Implement edge split. Write a validity checker that walks the whole mesh.",[L.s3ddocs]],
-  ["Review","Read about Loop subdivision and how split + flip combine to do it.",[L.course]],
+  ["Math: normals & subdivision","Area-weighted vertex normals, then how Loop subdivision's weights average neighbours.",[L.course]],
  ]},
  { t:"Ray tracing", g:"A path-tracer warm-up, plus the BVH that makes it fast.", d:[
   ["Rays & image","Ray Tracing in One Weekend: output an image, vec3 and ray classes (compare with your own Vec3).",[L.rt1]],
-  ["Spheres & normals","Ray-sphere intersection and surface normals.",[L.rt1]],
-  ["Antialiasing & diffuse","Multiple samples per pixel and diffuse (Lambertian) bounces.",[L.rt1]],
-  ["Materials","Metal and glass materials. Notice the randomness: this is Monte Carlo rendering.",[L.rt1]],
-  ["Camera","A positionable camera with field of view and depth of field.",[L.rt1]],
-  ["BVH","Ray Tracing: The Next Week, the BVH chapter. Why a tree of boxes makes rendering fast.",[L.rt2]],
-  ["Review","Render your final scene. Time it with and without a BVH if you got that far.",[]],
+  ["Spheres & normals","Ray-sphere intersection: it's a quadratic equation. Derive it yourself before reading.",[L.rt1]],
+  ["Antialiasing & diffuse","Multiple samples per pixel and diffuse bounces: Monte Carlo from week 3 in action.",[L.rt1]],
+  ["Materials","Metal and glass: reflection and refraction vectors from dot products.",[L.rt1]],
+  ["Camera","A positionable camera built from a change of basis.",[L.rt1]],
+  ["BVH","Ray Tracing: The Next Week, the BVH chapter. Ray-box intersection and why trees make rendering fast.",[L.rt2]],
+  ["Math: the rendering equation","Radiance, BRDFs and the rendering equation at an intuitive level. See how your tracer estimates it.",[L.sap]],
  ]},
- { t:"Animation", g:"Your home turf, now written in code: splines, skeletons, IK, skinning.", d:[
-  ["Splines","Implement a Catmull-Rom or Hermite spline and animate a point along it.",[L.course]],
-  ["Keyframe interpolation","Interpolate positions and rotations between keyframes. Use slerp for rotations.",[]],
-  ["Forward kinematics","Compute world positions of a 3-joint chain from local transforms (the Joint class from week 1).",[]],
-  ["Inverse kinematics","Implement 2D IK with CCD or gradient descent. Drag a target and watch the chain follow.",[L.khan]],
-  ["Linear blend skinning","Skin a 2D strip of vertices to two bones with weights. Watch the candy-wrapper artefact appear.",[]],
-  ["Particles","Simulate falling particles with forward Euler, then bounce off the ground.",[]],
+ { t:"Animation", g:"Your home turf, now written as math and code: splines, skeletons, IK, skinning.", d:[
+  ["Splines","Hermite and Catmull-Rom as cubic polynomials. Animate a point along one.",[L.course]],
+  ["Keyframes & slerp","Interpolate positions and rotations between keyframes. Why slerp beats lerp for rotations.",[]],
+  ["Forward kinematics","World positions of a 3-joint chain as a product of matrices.",[]],
+  ["Inverse kinematics","2D IK using the Jacobian from week 3 (Jacobian transpose or gradient descent).",[L.khan]],
+  ["Linear blend skinning","Skin a 2D strip of vertices to two bones. See the candy-wrapper artefact and why it happens mathematically.",[]],
+  ["Particles","Falling particles with Euler integration, then collisions with the ground.",[]],
   ["Review","Catch up. Note which of these are in Scotty3D's animation assignment.",[L.s3ddocs]],
  ]},
  { t:"Ready for Scotty3D", g:"Build the real codebase before day one.", d:[
-  ["Build Scotty3D","Clone and build Scotty3D on your machine. Fix any compiler or CMake issues now, not in week one of class.",[L.s3d]],
+  ["Build Scotty3D","Clone and build Scotty3D. Fix any compiler or CMake issues now, not in week one of class.",[L.s3d]],
   ["Tour the app","Use Scotty3D as an artist: model, render, animate. Note what feels like Maya and what doesn't.",[L.s3ddocs]],
   ["Read the code","Find where meshes, the renderer and the animator live. Read the half-edge header.",[L.s3d]],
-  ["Private repo setup","Set up a private Git repo for your coursework. The course asks students not to publish solutions in a public fork.",[L.s3d]],
-  ["Course logistics","Read the course site: grading, late days, collaboration policy, how assignments are structured.",[L.course]],
-  ["Plan your weeks","Block time in your calendar around ETC project hours. Expect 12–17 hours a week on 662.",[]],
+  ["Private repo setup","Set up a private Git repo for coursework. The course asks students not to publish solutions in a public fork.",[L.s3d]],
+  ["Course logistics","Read the course site: grading, late days, collaboration and AI policy.",[L.course]],
+  ["Plan your weeks","Block time around ETC project hours. Expect 12-17 hours a week on 662.",[]],
   ["Ready for class","Final pass on your cheat sheet. Rest.",[]],
  ]},
 ];
