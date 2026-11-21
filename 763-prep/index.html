@@ -64,6 +64,17 @@
   button.primary{background:var(--accent);color:#fff}
   button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
   button:disabled{opacity:.5;cursor:default}
+  .nav{display:flex;gap:6px;justify-content:flex-end;margin:-6px 0 6px}
+  .nav button{padding:6px 12px;font-size:13px}
+  .badge{font:600 11px "JetBrains Mono",monospace;background:var(--good-soft);color:var(--good);padding:3px 8px;border-radius:99px;vertical-align:middle}
+  .history{border-left:3px solid var(--good);padding:2px 0 2px 12px;margin:0 0 16px}
+  .history .h{font-size:14px;margin-top:6px}
+  .history .d{font:12px "JetBrains Mono",monospace;color:var(--muted)}
+  a.open{display:inline-block;font-size:13px;margin-top:4px;text-decoration:none}
+  .heat .cell[data-open]{cursor:pointer}
+  .heat .cell[data-open]:hover{outline:2px solid var(--accent);outline-offset:1px}
+  form.checkin{grid-template-columns:110px 1fr 150px !important}
+  @media (max-width:560px){form.checkin{grid-template-columns:1fr 1fr !important}}
   .done-msg{background:var(--good-soft);color:var(--good);border-radius:10px;padding:10px 12px;font-weight:500;margin-bottom:12px}
 
   h3.section{font-family:Fraunces,Georgia,serif;font-size:20px;margin:30px 0 12px}
@@ -286,15 +297,27 @@ function renderStats(){
   document.getElementById("pBar").style.width = (done/N*100) + "%";
 }
 
+let viewId = null; // null = follow the next unfinished session
+function openSession(id){
+  viewId = id; renderToday();
+  document.getElementById("today").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
 function renderToday(){
   const el = document.getElementById("today");
-  const t = nextTask();
+  const next = nextTask();
+  const t = viewId ? TASKS.find(x=>x.id===viewId) : next;
   const today = todayStr();
   const checkedToday = S.log.some(e=>e.date===today);
   if (!t) {
-    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-662. Go build Scotty3D.</p>`;
+    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-662. Go build Scotty3D.</p>
+      <div class="nav"><button class="ghost" type="button" id="navLast">← Revisit a past session</button></div>`;
+    document.getElementById("navLast").onclick = () => openSession(N);
     return;
   }
+  const isPast = !!S.done[t.id];
+  const pastEntries = S.log.filter(e=>e.task===t.id);
+  const viewingOther = next && t.id !== next.id;
   const planDay = diffDays(S.start, today) + 1;
   const done = Object.keys(S.done).length;
   let pace = "";
@@ -304,27 +327,46 @@ function renderToday(){
          : delta < 0 ? `<p class="pace behind">${-delta} session${delta<-1?"s":""} behind. Review days are good for catching up.</p>`
          : `<p class="pace">Right on schedule</p>`;
   }
-  const opts = TASKS.filter(x=>!S.done[x.id]).map(x=>`<option value="${x.id}" ${x.id===t.id?"selected":""}>Day ${x.id} · ${esc(x.title)}</option>`).join("");
+  const opts = TASKS.map(x=>`<option value="${x.id}" ${x.id===t.id?"selected":""}>${S.done[x.id]?"✓ ":""}Day ${x.id} · ${esc(x.title)}</option>`).join("");
+  const history = pastEntries.length ? `<div class="history"><div class="eyebrow" style="color:var(--good)">Your past check-ins for this session</div>
+      ${pastEntries.map(e=>`<div class="h"><span class="d">${fmt(e.date)} · ${e.minutes} min</span>${e.note?`<div>${esc(e.note)}</div>`:""}</div>`).join("")}</div>` : "";
   el.innerHTML = `
-    ${checkedToday ? `<div class="done-msg">✓ Checked in today. You can log another session if you're on a roll.</div>` : ""}
-    <div class="eyebrow">Week ${t.week} · Day ${t.id} of ${N} · ${esc(WEEKS[t.week-1].t)}</div>
-    <h2>${esc(t.title)}</h2>
+    ${checkedToday && !viewingOther ? `<div class="done-msg">✓ Checked in today. You can log another session if you're on a roll.</div>` : ""}
+    <div class="nav">
+      <button class="ghost" type="button" id="navPrev" ${t.id<=1?"disabled":""} aria-label="Previous session">←</button>
+      <button class="ghost" type="button" id="navNext" ${t.id>=N?"disabled":""} aria-label="Next session">→</button>
+      ${viewingOther ? `<button class="ghost" type="button" id="navUp">Back to up next (Day ${next.id})</button>` : ""}
+    </div>
+    <div class="eyebrow">${viewingOther ? (isPast ? "Revisiting · " : "Looking ahead · ") : ""}Week ${t.week} · Day ${t.id} of ${N} · ${esc(WEEKS[t.week-1].t)}</div>
+    <h2>${esc(t.title)}${isPast?` <span class="badge">done ${fmt(S.done[t.id])}</span>`:""}</h2>
     <p class="what">${esc(t.what)}</p>
     ${linkHTML(t.links)}
-    ${pace}
+    ${history}
+    ${viewingOther ? "" : pace}
     <form class="checkin" id="ciForm">
       <div><label for="ciMin">Minutes</label><input id="ciMin" type="number" min="5" max="600" step="5" value="60"></div>
       <div><label for="ciTask">Session</label><select id="ciTask">${opts}</select></div>
-      <div class="row-full"><label for="ciNote">Note (what clicked, what didn't)</label><textarea id="ciNote" placeholder="Optional"></textarea></div>
-      <div class="row-full"><button class="primary" type="submit">Check in for ${fmt(today)}</button></div>
+      <div><label for="ciDate">Date</label><input id="ciDate" type="date" value="${today}" max="${today}"></div>
+      <div class="row-full"><label for="ciNote">Note (what clicked, what didn't)</label><textarea id="ciNote" placeholder="${isPast?"Optional: e.g. reviewed this again":"Optional"}"></textarea></div>
+      <div class="row-full"><button class="primary" type="submit" id="ciBtn"></button></div>
     </form>`;
+  const dateIn = document.getElementById("ciDate"), btn = document.getElementById("ciBtn");
+  const label = () => { const d = dateIn.value || today; btn.textContent = `${isPast?"Log a review":"Check in"} for ${d===today?"today":fmt(d)}` };
+  label(); dateIn.oninput = label;
+  document.getElementById("navPrev").onclick = () => openSession(t.id-1);
+  document.getElementById("navNext").onclick = () => openSession(t.id+1);
+  if (viewingOther) document.getElementById("navUp").onclick = () => { viewId = null; renderToday() };
+  document.getElementById("ciTask").onchange = e => openSession(Number(e.target.value));
   document.getElementById("ciForm").onsubmit = e => {
     e.preventDefault();
     const id = Number(document.getElementById("ciTask").value);
     const minutes = Math.max(0, Number(document.getElementById("ciMin").value)||0);
     const note = document.getElementById("ciNote").value.trim();
-    S.done[id] = today;
-    S.log.unshift({date: today, task: id, minutes, note, at: Date.now()});
+    let date = dateIn.value || today; if (diffDays(today, date) > 0) date = today;
+    if (!S.done[id] || diffDays(date, S.done[id]) > 0) S.done[id] = date;
+    S.log.push({date, task: id, minutes, note, at: Date.now()});
+    S.log.sort((a,b)=> a.date===b.date ? b.at-a.at : (a.date<b.date?1:-1));
+    viewId = null;
     save(); renderAll();
   };
 }
@@ -339,10 +381,16 @@ function renderHeat(){
     for (let d = 0; d < 7; d++) {
       const day = addDays(S.start, w*7+d);
       const cls = ["cell", lvl(m[day]), day===today?"today":"", diffDays(today, day)>0?"future":""].join(" ");
-      h += `<div class="${cls}" title="${fmt(day)}${m[day]?` · ${m[day]} min`:""}"><span>${parse(day).getDate()}</span></div>`;
+      const entry = S.log.find(e=>e.date===day);
+      const target = entry ? entry.task : w*7+d+1;
+      h += `<div class="${cls}" data-open="${target}" role="button" tabindex="0" title="${fmt(day)}${m[day]?` · ${m[day]} min`:""} · open Day ${target}"><span>${parse(day).getDate()}</span></div>`;
     }
   }
   el.innerHTML = h;
+  el.querySelectorAll("[data-open]").forEach(c => {
+    c.onclick = () => openSession(Number(c.dataset.open));
+    c.onkeydown = ev => { if (ev.key==="Enter"||ev.key===" ") { ev.preventDefault(); openSession(Number(c.dataset.open)) } };
+  });
 }
 
 function renderWeeks(){
@@ -357,9 +405,11 @@ function renderWeeks(){
       ${ts.map(t=>`<div class="task ${S.done[t.id]?"is-done":""}">
         <input type="checkbox" data-id="${t.id}" ${S.done[t.id]?"checked":""} aria-label="Mark day ${t.id} done">
         <div><div class="tt"><small>D${t.id}</small>${esc(t.title)}</div><p>${esc(t.what)}</p>${linkHTML(t.links)}
-        ${S.done[t.id]?`<div class="when">done ${fmt(S.done[t.id])}</div>`:""}</div></div>`).join("")}
+        ${S.done[t.id]?`<div class="when">done ${fmt(S.done[t.id])}</div>`:""}
+        <a href="#today" class="open" data-open="${t.id}">${S.done[t.id]?"Revisit":"Open"} this session →</a></div></div>`).join("")}
     </details>`;
   }).join("");
+  el.querySelectorAll("a[data-open]").forEach(a => a.onclick = ev => { ev.preventDefault(); openSession(Number(a.dataset.open)) });
   el.querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => {
     const id = Number(cb.dataset.id);
     if (cb.checked) S.done[id] = todayStr(); else delete S.done[id];
@@ -373,7 +423,7 @@ function renderLog(){
   el.innerHTML = S.log.map((e,i)=>{
     const t = TASKS.find(x=>x.id===e.task);
     return `<li><div class="d">${fmt(e.date)} · ${e.minutes} min · <a href="#" data-del="${i}">remove</a></div>
-      <div>Day ${e.task} · ${esc(t?t.title:"")}</div>${e.note?`<div class="n">${esc(e.note)}</div>`:""}</li>`;
+      <div><a href="#today" data-open="${e.task}">Day ${e.task} · ${esc(t?t.title:"")}</a></div>${e.note?`<div class="n">${esc(e.note)}</div>`:""}</li>`;
   }).join("");
   el.querySelectorAll("[data-del]").forEach(a => a.onclick = ev => {
     ev.preventDefault();
@@ -383,6 +433,7 @@ function renderLog(){
     if (!S.log.some(x=>x.task===e.task)) delete S.done[e.task];
     save(); renderAll();
   });
+  el.querySelectorAll("a[data-open]").forEach(a => a.onclick = ev => { ev.preventDefault(); openSession(Number(a.dataset.open)) });
 }
 
 function renderAll(){ renderStats(); renderToday(); renderHeat(); renderWeeks(); renderLog(); document.getElementById("startDate").value = S.start }
