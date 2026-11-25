@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>15-662 Prep · Daily Check-in</title>
-<meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 15-662 Computer Graphics.">
+<title>16-831 Prep · Daily Check-in</title>
+<meta name="description" content="An 8-week, one-hour-a-day prep plan for CMU 16-831 Introduction to Robot Learning.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d4552b">
 <link rel="icon" href="icon-192.png">
@@ -120,9 +120,9 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">CMU 15-662 · Spring 2027 · Prep</div>
-    <h1>One hour a day toward<br>building your own 3D package</h1>
-    <p>An 8-week plan: C++ → linear algebra → vector calculus → rasterizer → half-edge meshes → ray tracer → animation → Scotty3D.</p>
+    <div class="eyebrow">CMU 16-831 · Spring 2027 · Prep</div>
+    <h1>One hour a day toward<br>robot learning</h1>
+    <p>An 8-week plan: C++ → linear algebra → calculus → probability → PyTorch → neural networks → RL → imitation learning.</p>
   </header>
 
   <section class="stats" aria-label="Progress">
@@ -159,11 +159,22 @@
     <p class="note">Progress is saved in this browser only. To move it to another device, export here and import there.</p>
   </div>
 
-  <footer>Course: <a href="https://15462.courses.cs.cmu.edu/fall2022">15-462/662 course site</a> · Code: <a href="https://github.com/CMU-Graphics/Scotty3D">Scotty3D</a></footer>
+  <footer>Course: <a href="https://16-831.github.io">16-831 course site</a></footer>
 </div>
 
 <script>
 const L = {
+  seeprob: ["Seeing Theory (probability)", "https://seeing-theory.brown.edu/"],
+  khanprob: ["Khan Academy: Probability", "https://www.khanacademy.org/math/statistics-probability/probability-library"],
+  pt: ["PyTorch: Learn the Basics", "https://pytorch.org/tutorials/beginner/basics/intro.html"],
+  karpathy: ["Karpathy: Neural Networks Zero to Hero", "https://karpathy.ai/zero-to-hero.html"],
+  sb: ["Sutton & Barto, RL book", "http://incompleteideas.net/book/the-book-2nd.html"],
+  spin: ["OpenAI Spinning Up", "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html"],
+  gym: ["Gymnasium (CartPole)", "https://gymnasium.farama.org/environments/classic_control/cart_pole/"],
+  sb3: ["Stable-Baselines3", "https://stable-baselines3.readthedocs.io/"],
+  c831: ["16-831 course site", "https://16-831.github.io"],
+  olaf: ["Olaf paper", "https://arxiv.org/abs/2512.16705"],
+  dmimic: ["DeepMimic project page", "https://xbpeng.github.io/projects/DeepMimic/index.html"],
   cpp: ["learncpp.com", "https://www.learncpp.com/"],
   cmake: ["CMake tutorial", "https://cmake.org/cmake/help/latest/guide/tutorial/index.html"],
   eola: ["Essence of Linear Algebra", "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab"],
@@ -178,7 +189,7 @@ const L = {
 };
 
 const WEEKS = [
- { t:"C++ essentials", g:"Enough C++ to read, build and debug Scotty3D.", d:[
+ { t:"C++ essentials", g:"C++ basics (a head start on 15-662 next fall).", d:[
   ["Setup + build","Install a C++ compiler, CMake and an IDE (VS Code or CLion). Build hello world with a CMakeLists.txt.",[L.cpp,L.cmake]],
   ["References & pointers","learncpp: references, pointers, new/delete. Draw box-and-arrow diagrams of what each line does.",[L.cpp]],
   ["Classes & Vec3","Write a Vec3 class with +, -, scalar *, dot() and cross(), split into .h and .cpp. You'll use it all plan long.",[L.cpp]],
@@ -187,7 +198,7 @@ const WEEKS = [
   ["Debugger & smart pointers","Plant a bug in Vec3 and find it with breakpoints only. Then read up on unique_ptr / RAII.",[L.cpp]],
   ["Mat4","Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[]],
  ]},
- { t:"Linear algebra", g:"The language of every transform, rig and renderer. Matches the course's Assignment 0.0.", d:[
+ { t:"Linear algebra", g:"The language of transforms, rigs and neural networks (a network is mostly matrix multiplication).", d:[
   ["Vectors, dot, cross","Essence of Linear Algebra: vectors, dot and cross product. Compute a triangle's normal and area with your Vec3.",[L.eola]],
   ["Matrices as transforms","Videos on linear transformations and matrix multiplication. Apply scale, rotate and shear to points and plot them.",[L.eola]],
   ["Determinant & inverse","What det means geometrically (area/volume, flips). When a matrix has no inverse. Check with your Mat4.",[L.eola]],
@@ -196,7 +207,7 @@ const WEEKS = [
   ["Rotations","Euler angles vs axis-angle vs quaternions (gimbal lock again). Implement axis-angle to matrix.",[L.sap]],
   ["Barycentric + review","Barycentric weights of a point in a triangle. Then write a one-page linear algebra cheat sheet.",[L.sap]],
  ]},
- { t:"Vector calculus & numerics", g:"Derivatives, integrals and the numerical tricks the course leans on. Matches Assignment 0.5.", d:[
+ { t:"Vector calculus & numerics", g:"Gradients drive all neural-network training; Monte Carlo sampling drives RL.", d:[
   ["Derivatives & gradients","Partial derivatives and the gradient. Plot contours of f(x, y) with gradient arrows.",[L.khan]],
   ["Jacobians","The Jacobian as a local linear map. You'll need it for IK. Compute one by hand for a 2-joint arm.",[L.khan]],
   ["Finite differences","Approximate a derivative numerically and use it to check a hand-derived gradient. Your #1 debugging tool for math code.",[]],
@@ -205,49 +216,49 @@ const WEEKS = [
   ["Time integration","Forward Euler on a spring. Watch the energy grow, then try symplectic Euler.",[]],
   ["Review","Add calculus and numerics to your cheat sheet. Redo any day that didn't click.",[]],
  ]},
- { t:"Rasterization", g:"A tiny version of the course's first assignment.", d:[
-  ["Write an image file","Write a program that outputs a gradient as a .ppm image. Open it in an image viewer.",[L.tiny]],
-  ["Draw lines","Implement a line-drawing algorithm (Bresenham) and draw a wireframe triangle.",[L.tiny]],
-  ["Fill triangles","Fill a triangle by testing each pixel with edge functions.",[L.tiny,L.sap]],
-  ["Interpolate colours","Use barycentric weights to blend colours across the triangle.",[L.sap]],
-  ["Depth buffer","Draw two overlapping triangles correctly with a z-buffer.",[L.tiny]],
-  ["Antialiasing","Supersample (several samples per pixel) and average. Compare jaggies before and after.",[L.sap]],
-  ["Math: sampling & aliasing","Why jaggies and moiré happen: sampling, the Nyquist idea, filtering. Connect it to what you just saw.",[L.sap]],
+ { t:"Probability", g:"The language of uncertainty. A listed prerequisite for 16-831, and the base of RL.", d:[
+  ["Random variables & distributions","A random variable is a quantity with an uncertain value; its distribution says how likely each value is. Seeing Theory chapters 1-2.",[L.seeprob]],
+  ["Expected value & variance","Expected value = the long-run average; variance = how spread out results are. Simulate dice rolls in NumPy and compare with the formulas.",[L.seeprob,L.khanprob]],
+  ["Conditional probability & Bayes","P(A | B) = chance of A given B is known. Bayes' rule updates a belief after evidence. Work 3 problems by hand.",[L.seeprob]],
+  ["Gaussians","The normal (bell-curve) distribution: mean and standard deviation. Sample 10,000 points and plot a histogram.",[L.seeprob]],
+  ["Sampling & Monte Carlo again","Estimate an expected value by averaging samples. This is exactly how RL estimates how good an action is.",[]],
+  ["Maximum likelihood","Choosing the parameters that make the observed data most likely. Fit a Gaussian to data by hand and in NumPy.",[L.khanprob]],
+  ["Review","Add probability to your cheat sheet. Redo any day that didn't click.",[]],
  ]},
- { t:"Meshes & the half-edge", g:"The data structure behind every mesh-editing tool you use in Maya.", d:[
-  ["Mesh representations","Vertex list + face list vs half-edge. Why bevel and subdivide need neighbour information.",[L.s3ddocs]],
-  ["Half-edge on paper","Draw a two-triangle mesh. Label every half-edge with its twin, next, vertex, edge and face.",[]],
-  ["Build a half-edge mesh","Write classes for Vertex, Edge, HalfEdge, Face. Build one from a tiny OBJ.",[L.cpp]],
-  ["Traversal","Loop around a vertex to list its neighbours. Print each vertex's valence.",[]],
-  ["Edge flip","Implement edge flip on your two-triangle mesh. Check every pointer afterwards.",[L.s3ddocs]],
-  ["Edge split","Implement edge split. Write a validity checker that walks the whole mesh.",[L.s3ddocs]],
-  ["Math: normals & subdivision","Area-weighted vertex normals, then how Loop subdivision's weights average neighbours.",[L.course]],
+ { t:"Machine learning + PyTorch", g:"What training a model means, in the library the homeworks use.", d:[
+  ["What is a model?","A model is a function with adjustable numbers (parameters). Training = adjusting them so outputs match data. Watch Karpathy lecture 1, first half.",[L.karpathy]],
+  ["Loss functions","A loss is a score of how wrong the model is (mean squared error, cross-entropy). Compute both by hand for a tiny example.",[]],
+  ["Gradient descent in NumPy","Fit a straight line to noisy data with hand-written gradient descent. Plot the loss going down.",[]],
+  ["PyTorch tensors","A tensor is PyTorch's array that can also track gradients. Install PyTorch, do the Tensors tutorial.",[L.pt]],
+  ["Autograd","PyTorch computes gradients for you (backpropagation). Redo the line fit using autograd.",[L.pt]],
+  ["The training loop","Model, loss, optimizer, loop over data. Do the PyTorch Optimization tutorial.",[L.pt]],
+  ["Train/test & overfitting","Overfitting = memorising the training data instead of learning the pattern. Split data and watch test loss.",[L.pt]],
  ]},
- { t:"Ray tracing", g:"A path-tracer warm-up, plus the BVH that makes it fast.", d:[
-  ["Rays & image","Ray Tracing in One Weekend: output an image, vec3 and ray classes (compare with your own Vec3).",[L.rt1]],
-  ["Spheres & normals","Ray-sphere intersection: it's a quadratic equation. Derive it yourself before reading.",[L.rt1]],
-  ["Antialiasing & diffuse","Multiple samples per pixel and diffuse bounces: Monte Carlo from week 3 in action.",[L.rt1]],
-  ["Materials","Metal and glass: reflection and refraction vectors from dot products.",[L.rt1]],
-  ["Camera","A positionable camera built from a change of basis.",[L.rt1]],
-  ["BVH","Ray Tracing: The Next Week, the BVH chapter. Ray-box intersection and why trees make rendering fast.",[L.rt2]],
-  ["Math: the rendering equation","Radiance, BRDFs and the rendering equation at an intuitive level. See how your tracer estimates it.",[L.sap]],
+ { t:"Neural networks", g:"The function approximator behind every modern RL policy.", d:[
+  ["Neurons & layers","A neural network stacks layers of weighted sums plus a nonlinearity (e.g. ReLU). Build one by hand in PyTorch with nn.Linear.",[L.pt]],
+  ["Backpropagation intuition","How the gradient flows back through layers (chain rule from week 3). Karpathy micrograd lecture.",[L.karpathy]],
+  ["Classify images","Train a small network on MNIST or FashionMNIST following the PyTorch quickstart.",[L.pt]],
+  ["Debugging training","Learning rate too high or low, loss not falling, NaNs. Break your model on purpose and fix it.",[]],
+  ["Regression for motion","Train a network to predict a joint angle from a time value (e.g. a sine-wave walk cycle). Your first motion model.",[]],
+  ["Saving & GPU","Save/load a model; move it to the GPU if you have one. Note how long training takes.",[L.pt]],
+  ["Review","Catch up. Write down the training loop from memory.",[]],
  ]},
- { t:"Animation", g:"Your home turf, now written as math and code: splines, skeletons, IK, skinning.", d:[
-  ["Splines","Hermite and Catmull-Rom as cubic polynomials. Animate a point along one.",[L.course]],
-  ["Keyframes & slerp","Interpolate positions and rotations between keyframes. Why slerp beats lerp for rotations.",[]],
-  ["Forward kinematics","World positions of a 3-joint chain as a product of matrices.",[]],
-  ["Inverse kinematics","2D IK using the Jacobian from week 3 (Jacobian transpose or gradient descent).",[L.khan]],
-  ["Linear blend skinning","Skin a 2D strip of vertices to two bones. See the candy-wrapper artefact and why it happens mathematically.",[]],
-  ["Particles","Falling particles with Euler integration, then collisions with the ground.",[]],
-  ["Review","Catch up. Note which of these are in Scotty3D's animation assignment.",[L.s3ddocs]],
+ { t:"Reinforcement learning basics", g:"Learning by trial and error from rewards.", d:[
+  ["The RL loop","Agent, environment, state, action, reward, policy. Read Spinning Up 'Key Concepts'.",[L.spin]],
+  ["Returns & discounting","The return = total future reward; discounting makes near rewards count more. Sutton & Barto ch. 3, skim.",[L.sb,L.spin]],
+  ["Value functions","How good a state or action is, on average (expected value from week 4). Spinning Up continued.",[L.spin]],
+  ["Run CartPole","Install Gymnasium. Run CartPole with random actions and watch it fail.",[L.gym]],
+  ["Policy gradient by hand","Implement REINFORCE (the simplest policy-gradient method) for CartPole in PyTorch.",[L.spin,L.gym]],
+  ["Use a library","Train PPO on CartPole with Stable-Baselines3. PPO is the algorithm most character papers use.",[L.sb3]],
+  ["Reward shaping","Change the reward (e.g. penalise moving the cart) and see how behaviour changes. This is how Olaf got quiet footsteps.",[L.sb3]],
  ]},
- { t:"Ready for Scotty3D", g:"Build the real codebase before day one.", d:[
-  ["Build Scotty3D","Clone and build Scotty3D. Fix any compiler or CMake issues now, not in week one of class.",[L.s3d]],
-  ["Tour the app","Use Scotty3D as an artist: model, render, animate. Note what feels like Maya and what doesn't.",[L.s3ddocs]],
-  ["Read the code","Find where meshes, the renderer and the animator live. Read the half-edge header.",[L.s3d]],
-  ["Private repo setup","Set up a private Git repo for coursework. The course asks students not to publish solutions in a public fork.",[L.s3d]],
-  ["Course logistics","Read the course site: grading, late days, collaboration and AI policy.",[L.course]],
-  ["Plan your weeks","Block time around ETC project hours. Expect 12-17 hours a week on 662.",[]],
+ { t:"Imitation learning & ready for 16-831", g:"Copying demonstrations: the core idea behind physics-based characters.", d:[
+  ["Behavior cloning","Imitation by supervised learning: train a network to output the expert's action for each state. Clone your PPO CartPole agent.",[]],
+  ["Why cloning drifts","Small mistakes lead to states the expert never showed. Read about DAgger, which fixes this (it's on the syllabus).",[L.c831]],
+  ["DeepMimic","Read the DeepMimic project page: RL with an imitation reward from mocap clips.",[L.dmimic]],
+  ["Read the Olaf paper","Reinforcement learning guided by animation references. Note every reward term they use.",[L.olaf]],
+  ["Course logistics","Read the 16-831 site: homeworks, project, grading, AI policy.",[L.c831]],
+  ["Project ideas","Write 3 course-project ideas tied to stylized character motion.",[]],
   ["Ready for class","Final pass on your cheat sheet. Rest.",[]],
  ]},
 ];
@@ -310,7 +321,7 @@ function renderToday(){
   const today = todayStr();
   const checkedToday = S.log.some(e=>e.date===today);
   if (!t) {
-    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 15-662. Go build Scotty3D.</p>
+    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 16-831.</p>
       <div class="nav"><button class="ghost" type="button" id="navLast">← Revisit a past session</button></div>`;
     document.getElementById("navLast").onclick = () => openSession(N);
     return;
@@ -442,7 +453,7 @@ document.getElementById("startDate").onchange = e => { if (e.target.value) { S.s
 document.getElementById("btnExport").onclick = () => {
   const blob = new Blob([JSON.stringify(S,null,2)], {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `662-prep-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
+  a.download = `831-prep-${todayStr()}.json`; a.click(); URL.revokeObjectURL(a.href);
 };
 document.getElementById("btnImport").onclick = () => document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange = async e => {
