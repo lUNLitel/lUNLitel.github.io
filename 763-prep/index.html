@@ -122,11 +122,11 @@
   <header>
     <div class="eyebrow">CMU 16-831 · Spring 2027 · Prep</div>
     <h1>One hour a day toward<br>robot learning</h1>
-    <p>An 8-week plan: C++ → linear algebra → calculus → probability → PyTorch → neural networks → RL → imitation learning.</p>
+    <p>An 8-week plan: C++ basics → linear algebra → calculus → probability → PyTorch → neural networks → RL → imitation learning. Each session is one idea, sized for about an hour.</p>
   </header>
 
   <section class="stats" aria-label="Progress">
-    <div class="stat"><b id="sDone">0/56</b><span>sessions done</span></div>
+    <div class="stat"><b id="sDone">0/53</b><span>sessions done</span></div>
     <div class="stat"><b id="sStreak">0</b><span>day streak</span></div>
     <div class="stat"><b id="sHours">0h</b><span>time logged</span></div>
     <div class="stat"><b id="sLeft">–</b><span id="sLeftLbl">days left in plan</span></div>
@@ -164,6 +164,9 @@
 
 <script>
 const L = {
+  calc: ["Essence of Calculus (3Blue1Brown)", "https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr"],
+  nn3b: ["Neural networks (3Blue1Brown)", "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi"],
+  ptq: ["PyTorch Quickstart", "https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html"],
   seeprob: ["Seeing Theory (probability)", "https://seeing-theory.brown.edu/"],
   khanprob: ["Khan Academy: Probability", "https://www.khanacademy.org/math/statistics-probability/probability-library"],
   pt: ["PyTorch: Learn the Basics", "https://pytorch.org/tutorials/beginner/basics/intro.html"],
@@ -189,81 +192,83 @@ const L = {
 };
 
 const WEEKS = [
- { t:"C++ essentials", g:"C++ basics (a head start on 15-662 next fall).", d:[
+ { t:"C++ essentials", g:"C++ basics. Stop after day 4: days 5-7 are optional, for next summer before 15-662.", d:[
   ["Setup + build","Install a C++ compiler, CMake and an IDE (VS Code or CLion). Build hello world with a CMakeLists.txt.",[L.cpp,L.cmake]],
   ["References & pointers","learncpp: references, pointers, new/delete. Draw box-and-arrow diagrams of what each line does.",[L.cpp]],
   ["Classes & Vec3","Write a Vec3 class with +, -, scalar *, dot() and cross(), split into .h and .cpp. You'll use it all plan long.",[L.cpp]],
   ["The STL","std::vector and std::unordered_map, range-for loops. Store a joint hierarchy in a vector and print it.",[L.cpp]],
-  ["std::list & iterators","Scotty3D's half-edge mesh is built on list iterators. Insert and erase from a std::list while holding iterators.",[L.cpp]],
-  ["Debugger & smart pointers","Plant a bug in Vec3 and find it with breakpoints only. Then read up on unique_ptr / RAII.",[L.cpp]],
-  ["Mat4","Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[]],
+  ["std::list & iterators","Optional (summer, before 15-662). Scotty3D's half-edge mesh is built on list iterators. Insert and erase from a std::list while holding iterators.",[L.cpp],true],
+  ["Debugger & smart pointers","Optional (summer, before 15-662). Plant a bug in Vec3 and find it with breakpoints only. Then read up on unique_ptr / RAII.",[L.cpp],true],
+  ["Mat4","Optional (summer, before 15-662). Write a 4x4 matrix class with multiply and transform-point. Test it against a known rotation.",[],true],
  ]},
- { t:"Linear algebra", g:"The language of transforms, rigs and neural networks (a network is mostly matrix multiplication).", d:[
-  ["Vectors, dot, cross","Essence of Linear Algebra: vectors, dot and cross product. Compute a triangle's normal and area with your Vec3.",[L.eola]],
-  ["Matrices as transforms","Videos on linear transformations and matrix multiplication. Apply scale, rotate and shear to points and plot them.",[L.eola]],
-  ["Determinant & inverse","What det means geometrically (area/volume, flips). When a matrix has no inverse. Check with your Mat4.",[L.eola]],
-  ["Change of basis","Coordinate frames, the same thing as joint orients and local vs world space in Maya. Convert a point between two frames.",[L.eola]],
-  ["Homogeneous coordinates","Why 4x4: translation as a matrix. Build translate × rotate × scale and show that the order changes the result.",[L.sap]],
-  ["Rotations","Euler angles vs axis-angle vs quaternions (gimbal lock again). Implement axis-angle to matrix.",[L.sap]],
-  ["Barycentric + review","Barycentric weights of a point in a triangle. Then write a one-page linear algebra cheat sheet.",[L.sap]],
+ { t:"Linear algebra", g:"One idea per day: a short video, then one small NumPy exercise. Vectors and matrices are what neural networks are made of.", d:[
+  ["Vectors","A vector is a list of numbers that can mean an arrow (direction + length) or a data point. Watch Essence of Linear Algebra ep 1 (~10 min). Then in NumPy: make two 2D vectors, add them, scale one by 2, and plot all three as arrows.",[L.eola]],
+  ["Combining vectors","A linear combination = scale some vectors and add them. Watch ep 2 (~10 min). Then: write a 3-line function that returns a*v + b*w and try a few values of a and b.",[L.eola]],
+  ["Matrices are transformations","A matrix is a recipe that moves every point in space (like a deformer). Watch ep 3 (~11 min). Then: apply a 2x2 matrix to the 4 corners of a square and plot before and after.",[L.eola]],
+  ["Multiplying matrices","Multiplying two matrices = doing one transform, then the other. Watch ep 4 (~10 min). Then: show that rotate-then-scale gives a different result than scale-then-rotate.",[L.eola]],
+  ["The determinant","The determinant = how much a transform scales area; negative means it flips. Watch ep 6 (~10 min). Then: compute np.linalg.det for 3 matrices and guess the answer before you run it.",[L.eola]],
+  ["The dot product","The dot product measures how much two vectors point the same way. A neural-network neuron is basically a dot product. Watch ep 9 (~14 min). Then: compute the angle between two vectors.",[L.eola]],
+  ["Review","Catch up on any day you missed. Write your cheat sheet page: vector, matrix, multiply, determinant, dot product, each with one sentence.",[]],
  ]},
- { t:"Vector calculus & numerics", g:"Gradients drive all neural-network training; Monte Carlo sampling drives RL.", d:[
-  ["Derivatives & gradients","Partial derivatives and the gradient. Plot contours of f(x, y) with gradient arrows.",[L.khan]],
-  ["Jacobians","The Jacobian as a local linear map. You'll need it for IK. Compute one by hand for a 2-joint arm.",[L.khan]],
-  ["Finite differences","Approximate a derivative numerically and use it to check a hand-derived gradient. Your #1 debugging tool for math code.",[]],
-  ["Optimization","Gradient descent and Newton's method on a 2D function. Print how fast each converges.",[L.khan]],
-  ["Integrals & Monte Carlo","Estimate an integral (e.g. the area of a circle) by random sampling. This is how path tracing works.",[L.khan]],
-  ["Time integration","Forward Euler on a spring. Watch the energy grow, then try symplectic Euler.",[]],
-  ["Review","Add calculus and numerics to your cheat sheet. Redo any day that didn't click.",[]],
+ { t:"Calculus, just what you need", g:"Derivatives and gradients: how every model learns. Video first, then a tiny code check.", d:[
+  ["What a derivative is","A derivative = how fast something changes; the slope at a point. Watch Essence of Calculus ep 1-2 (~35 min). No code today.",[L.calc]],
+  ["Slope with code","Check a derivative with numbers: (f(x+h) - f(x)) / h with a tiny h. Do it for f(x) = x² at x = 3 and compare with 2x.",[]],
+  ["The chain rule","The chain rule = how to take the slope of a function inside a function. It's exactly what backpropagation does. Watch Essence of Calculus ep 4 (~16 min).",[L.calc]],
+  ["Partial derivatives & the gradient","A partial derivative = slope along one input while the others stay still. The gradient = all of them together; it points uphill. Watch Khan's short 'gradient' videos (~20 min).",[L.khan]],
+  ["Gradient descent in 1D","Gradient descent = take small steps downhill to find a minimum. In Python: start at x = 5, repeat x = x - 0.1 * 2x twenty times, print x each step.",[]],
+  ["Gradient descent in 2D","Same idea on f(x, y) = x² + 3y². Try learning rates 0.01, 0.1 and 0.5 and see which crawls, works or blows up.",[]],
+  ["Review","Catch up. Add derivative, chain rule, gradient and gradient descent to your cheat sheet.",[]],
  ]},
- { t:"Probability", g:"The language of uncertainty. A listed prerequisite for 16-831, and the base of RL.", d:[
-  ["Random variables & distributions","A random variable is a quantity with an uncertain value; its distribution says how likely each value is. Seeing Theory chapters 1-2.",[L.seeprob]],
-  ["Expected value & variance","Expected value = the long-run average; variance = how spread out results are. Simulate dice rolls in NumPy and compare with the formulas.",[L.seeprob,L.khanprob]],
-  ["Conditional probability & Bayes","P(A | B) = chance of A given B is known. Bayes' rule updates a belief after evidence. Work 3 problems by hand.",[L.seeprob]],
-  ["Gaussians","The normal (bell-curve) distribution: mean and standard deviation. Sample 10,000 points and plot a histogram.",[L.seeprob]],
-  ["Sampling & Monte Carlo again","Estimate an expected value by averaging samples. This is exactly how RL estimates how good an action is.",[]],
-  ["Maximum likelihood","Choosing the parameters that make the observed data most likely. Fit a Gaussian to data by hand and in NumPy.",[L.khanprob]],
-  ["Review","Add probability to your cheat sheet. Redo any day that didn't click.",[]],
+ { t:"Probability", g:"The language of uncertainty, and a listed prerequisite for 16-831. Interactive pages plus tiny simulations.", d:[
+  ["Chance basics","Probability = how likely something is, from 0 to 1. Read Seeing Theory ch 1, 'Basic Probability' (interactive). Then: simulate 1,000 coin flips in NumPy and count heads.",[L.seeprob]],
+  ["Random variables & distributions","A random variable = a number that comes out of a random process. Its distribution = how likely each value is. Roll a simulated die 10,000 times and plot a histogram.",[L.seeprob]],
+  ["Expected value","Expected value = the long-run average. Compute the average of your 10,000 die rolls and compare with 3.5.",[L.seeprob,L.khanprob]],
+  ["Variance","Variance = how spread out results are. Compare the spread of one die vs the average of two dice.",[L.seeprob]],
+  ["Conditional probability","P(A | B) = the chance of A when you already know B happened. Seeing Theory ch 3. Then do 2 small problems by hand.",[L.seeprob]],
+  ["The Gaussian (bell curve)","The normal distribution is set by a mean (centre) and standard deviation (width). Sample 10,000 points with np.random.normal and plot them.",[L.seeprob]],
+  ["Sampling & review","Monte Carlo = estimate an average by sampling many times. RL uses this to judge how good an action is. Then update your cheat sheet.",[]],
  ]},
- { t:"Machine learning + PyTorch", g:"What training a model means, in the library the homeworks use.", d:[
-  ["What is a model?","A model is a function with adjustable numbers (parameters). Training = adjusting them so outputs match data. Watch Karpathy lecture 1, first half.",[L.karpathy]],
-  ["Loss functions","A loss is a score of how wrong the model is (mean squared error, cross-entropy). Compute both by hand for a tiny example.",[]],
-  ["Gradient descent in NumPy","Fit a straight line to noisy data with hand-written gradient descent. Plot the loss going down.",[]],
-  ["PyTorch tensors","A tensor is PyTorch's array that can also track gradients. Install PyTorch, do the Tensors tutorial.",[L.pt]],
-  ["Autograd","PyTorch computes gradients for you (backpropagation). Redo the line fit using autograd.",[L.pt]],
-  ["The training loop","Model, loss, optimizer, loop over data. Do the PyTorch Optimization tutorial.",[L.pt]],
-  ["Train/test & overfitting","Overfitting = memorising the training data instead of learning the pattern. Split data and watch test loss.",[L.pt]],
+ { t:"Machine learning + PyTorch", g:"What training a model means, then the library the homeworks use. Guided tutorials, not from scratch.", d:[
+  ["What a neural network is","A model = a function with adjustable numbers (parameters). Watch 3Blue1Brown 'But what is a neural network?' (~19 min). No code today.",[L.nn3b]],
+  ["Loss","A loss = one number saying how wrong the model is. Compute mean squared error by hand for 3 points and a guessed line.",[]],
+  ["Fit a line by hand","Combine week 3 and today: fit y = a*x + b to 20 noisy points with gradient descent in NumPy. A starter skeleton is fine; ask an AI to explain each line.",[]],
+  ["Install PyTorch + tensors","A tensor = PyTorch's version of a NumPy array that can track gradients. Install PyTorch and do the 'Tensors' tutorial page.",[L.pt]],
+  ["Autograd","Autograd = PyTorch works out the gradient for you. Do the 'Autograd' tutorial page. Check it gives 2x for x².",[L.pt]],
+  ["The training loop","Every training loop has 4 steps: predict, compute loss, backward, step. Do the 'Optimization' tutorial page.",[L.pt]],
+  ["Review","Catch up. Write the 4-step training loop from memory, with one sentence each.",[]],
  ]},
- { t:"Neural networks", g:"The function approximator behind every modern RL policy.", d:[
-  ["Neurons & layers","A neural network stacks layers of weighted sums plus a nonlinearity (e.g. ReLU). Build one by hand in PyTorch with nn.Linear.",[L.pt]],
-  ["Backpropagation intuition","How the gradient flows back through layers (chain rule from week 3). Karpathy micrograd lecture.",[L.karpathy]],
-  ["Classify images","Train a small network on MNIST or FashionMNIST following the PyTorch quickstart.",[L.pt]],
-  ["Debugging training","Learning rate too high or low, loss not falling, NaNs. Break your model on purpose and fix it.",[]],
-  ["Regression for motion","Train a network to predict a joint angle from a time value (e.g. a sine-wave walk cycle). Your first motion model.",[]],
-  ["Saving & GPU","Save/load a model; move it to the GPU if you have one. Note how long training takes.",[L.pt]],
-  ["Review","Catch up. Write down the training loop from memory.",[]],
+ { t:"Neural networks", g:"Run a real network end to end, following PyTorch's quickstart in small pieces.", d:[
+  ["How networks learn","Watch 3Blue1Brown NN ep 2, 'Gradient descent, how neural networks learn' (~21 min).",[L.nn3b]],
+  ["Backpropagation intuition","Watch 3Blue1Brown NN ep 3, 'Backpropagation' (~14 min). It's the chain rule from week 3, applied layer by layer.",[L.nn3b]],
+  ["Quickstart 1: data","Run the first part of the PyTorch Quickstart: load the FashionMNIST dataset and look at a few images.",[L.ptq]],
+  ["Quickstart 2: the model","Next part: define the network (a few nn.Linear layers with ReLU). Print it and read each line.",[L.ptq]],
+  ["Quickstart 3: train & test","Run training for a few epochs and watch accuracy rise. This is a full ML pipeline.",[L.ptq]],
+  ["Change one thing","Change one setting (learning rate, or layer size) and compare accuracy. Write down what happened.",[L.ptq]],
+  ["Review","Catch up. Note which parts still feel unclear, to ask about in 16-831.",[]],
  ]},
- { t:"Reinforcement learning basics", g:"Learning by trial and error from rewards.", d:[
-  ["The RL loop","Agent, environment, state, action, reward, policy. Read Spinning Up 'Key Concepts'.",[L.spin]],
-  ["Returns & discounting","The return = total future reward; discounting makes near rewards count more. Sutton & Barto ch. 3, skim.",[L.sb,L.spin]],
-  ["Value functions","How good a state or action is, on average (expected value from week 4). Spinning Up continued.",[L.spin]],
-  ["Run CartPole","Install Gymnasium. Run CartPole with random actions and watch it fail.",[L.gym]],
-  ["Policy gradient by hand","Implement REINFORCE (the simplest policy-gradient method) for CartPole in PyTorch.",[L.spin,L.gym]],
-  ["Use a library","Train PPO on CartPole with Stable-Baselines3. PPO is the algorithm most character papers use.",[L.sb3]],
-  ["Reward shaping","Change the reward (e.g. penalise moving the cart) and see how behaviour changes. This is how Olaf got quiet footsteps.",[L.sb3]],
+ { t:"Reinforcement learning", g:"Learning by trial and error. Concepts first, then use a library instead of writing algorithms from scratch.", d:[
+  ["The RL loop","Agent, environment, state, action, reward. Read Spinning Up 'Key Concepts', first half only.",[L.spin]],
+  ["Policy & return","A policy = the agent's rule for picking actions. The return = total future reward. Read the second half.",[L.spin]],
+  ["Meet CartPole","Install Gymnasium and run CartPole with random actions. Watch it fall over and print the score.",[L.gym]],
+  ["Write your own rule","Hand-write a policy: push the cart toward the side the pole leans. Compare its score with random.",[L.gym]],
+  ["Train with PPO","PPO = the RL algorithm most character papers use. Copy the Stable-Baselines3 quickstart and train it on CartPole.",[L.sb3]],
+  ["Watch and measure","Render the trained agent and plot its reward over training. Compare with your hand rule.",[L.sb3]],
+  ["Review","Catch up. Explain in 3 sentences how PPO learned without being told the rule.",[]],
  ]},
- { t:"Imitation learning & ready for 16-831", g:"Copying demonstrations: the core idea behind physics-based characters.", d:[
-  ["Behavior cloning","Imitation by supervised learning: train a network to output the expert's action for each state. Clone your PPO CartPole agent.",[]],
-  ["Why cloning drifts","Small mistakes lead to states the expert never showed. Read about DAgger, which fixes this (it's on the syllabus).",[L.c831]],
-  ["DeepMimic","Read the DeepMimic project page: RL with an imitation reward from mocap clips.",[L.dmimic]],
-  ["Read the Olaf paper","Reinforcement learning guided by animation references. Note every reward term they use.",[L.olaf]],
-  ["Course logistics","Read the 16-831 site: homeworks, project, grading, AI policy.",[L.c831]],
-  ["Project ideas","Write 3 course-project ideas tied to stylized character motion.",[]],
-  ["Ready for class","Final pass on your cheat sheet. Rest.",[]],
+ { t:"Imitation learning & ready for 16-831", g:"Learning by copying examples: the idea behind animation-driven characters like Olaf.", d:[
+  ["What imitation learning is","Imitation learning = learning from demonstrations instead of rewards. Behavior cloning = treat it as supervised learning (state in, expert action out). Skim the 16-831 lecture list for these topics.",[L.c831]],
+  ["Collect demonstrations","Run your PPO CartPole agent for 50 episodes and save (state, action) pairs to a file.",[L.sb3]],
+  ["Clone it","Train a small network on those pairs, reusing your week 6 code.",[L.ptq]],
+  ["Clone vs expert","Score your clone against the expert. Where does it fail? That drift is why DAgger exists.",[]],
+  ["DeepMimic","Watch the DeepMimic video and read its project page: RL with a reward for matching mocap.",[L.dmimic]],
+  ["Read Olaf","Read the Olaf paper's introduction and look at every figure. List the reward terms they mention.",[L.olaf]],
+  ["Ready for class","Read the 16-831 course site (homeworks, project, AI policy) and write 1 project idea.",[L.c831]],
  ]},
 ];
-const TASKS = WEEKS.flatMap((w,wi)=>w.d.map((d,di)=>({id:wi*7+di+1,week:wi+1,title:d[0],what:d[1],links:d[2]})));
-const N = TASKS.length;
+const TASKS = WEEKS.flatMap((w,wi)=>w.d.map((d,di)=>({id:wi*7+di+1,week:wi+1,title:d[0],what:d[1],links:d[2],opt:!!d[3]})));
+const N = TASKS.filter(t=>!t.opt).length;
+const TOTAL = TASKS.length;
+const doneCount = () => TASKS.filter(t=>!t.opt && S.done[t.id]).length;
 
 const KEY = "cg662prep.v1";
 const DEFAULT_START = "2026-11-20";
@@ -293,15 +298,15 @@ function streak(){
   while (days.has(d)) { n++; d = addDays(d,-1) }
   return n;
 }
-const nextTask = () => TASKS.find(t => !S.done[t.id]);
+const nextTask = () => TASKS.find(t => !t.opt && !S.done[t.id]);
 
 function renderStats(){
-  const done = Object.keys(S.done).length;
+  const done = doneCount();
   const mins = S.log.reduce((a,e)=>a+(Number(e.minutes)||0),0);
   document.getElementById("sDone").textContent = `${done}/${N}`;
   document.getElementById("sStreak").textContent = streak();
   document.getElementById("sHours").textContent = (mins/60).toFixed(mins%60===0?0:1) + "h";
-  const end = addDays(S.start, N-1), left = diffDays(todayStr(), end);
+  const end = addDays(S.start, TOTAL-1), left = diffDays(todayStr(), end);
   const sl = document.getElementById("sLeft"), lbl = document.getElementById("sLeftLbl");
   if (diffDays(S.start, todayStr()) < 0) { sl.textContent = -diffDays(S.start, todayStr()); lbl.textContent = "days until start" }
   else { sl.textContent = Math.max(0,left); lbl.textContent = "days left in plan" }
@@ -321,24 +326,24 @@ function renderToday(){
   const today = todayStr();
   const checkedToday = S.log.some(e=>e.date===today);
   if (!t) {
-    el.innerHTML = `<div class="eyebrow">All done</div><h2>All 56 sessions complete 🎉</h2><p class="what">You're ready for 16-831.</p>
+    el.innerHTML = `<div class="eyebrow">All done</div><h2>All sessions complete 🎉</h2><p class="what">You're ready for 16-831.</p>
       <div class="nav"><button class="ghost" type="button" id="navLast">← Revisit a past session</button></div>`;
-    document.getElementById("navLast").onclick = () => openSession(N);
+    document.getElementById("navLast").onclick = () => openSession(TOTAL);
     return;
   }
   const isPast = !!S.done[t.id];
   const pastEntries = S.log.filter(e=>e.task===t.id);
   const viewingOther = next && t.id !== next.id;
   const planDay = diffDays(S.start, today) + 1;
-  const done = Object.keys(S.done).length;
+  const done = doneCount();
   let pace = "";
   if (planDay >= 1) {
-    const delta = done - Math.min(planDay - (checkedToday?0:1), N);
+    const delta = done - TASKS.filter(x=>!x.opt && x.id <= planDay - (checkedToday?0:1)).length;
     pace = delta > 0 ? `<p class="pace ahead">${delta} session${delta>1?"s":""} ahead of schedule</p>`
-         : delta < 0 ? `<p class="pace behind">${-delta} session${delta<-1?"s":""} behind. Review days are good for catching up.</p>`
+         : delta < 0 ? `<p class="pace behind">${-delta} session${delta<-1?"s":""} behind. Review days are good for catching up. If a session runs past 90 minutes, stop, check in, and note what was hard.</p>`
          : `<p class="pace">Right on schedule</p>`;
   }
-  const opts = TASKS.map(x=>`<option value="${x.id}" ${x.id===t.id?"selected":""}>${S.done[x.id]?"✓ ":""}Day ${x.id} · ${esc(x.title)}</option>`).join("");
+  const opts = TASKS.map(x=>`<option value="${x.id}" ${x.id===t.id?"selected":""}>${S.done[x.id]?"✓ ":""}Day ${x.id} · ${esc(x.title)}${x.opt?" (optional)":""}</option>`).join("");
   const history = pastEntries.length ? `<div class="history"><div class="eyebrow" style="color:var(--good)">Your past check-ins for this session</div>
       ${pastEntries.map(e=>`<div class="h"><span class="d">${fmt(e.date)} · ${e.minutes} min</span>${e.note?`<div>${esc(e.note)}</div>`:""}</div>`).join("")}</div>` : "";
   el.innerHTML = `
@@ -348,7 +353,7 @@ function renderToday(){
       <button class="ghost" type="button" id="navNext" ${t.id>=N?"disabled":""} aria-label="Next session">→</button>
       ${viewingOther ? `<button class="ghost" type="button" id="navUp">Back to up next (Day ${next.id})</button>` : ""}
     </div>
-    <div class="eyebrow">${viewingOther ? (isPast ? "Revisiting · " : "Looking ahead · ") : ""}Week ${t.week} · Day ${t.id} of ${N} · ${esc(WEEKS[t.week-1].t)}</div>
+    <div class="eyebrow">${viewingOther ? (isPast ? "Revisiting · " : "Looking ahead · ") : ""}Week ${t.week} · Day ${t.id} of ${TOTAL} · ${esc(WEEKS[t.week-1].t)}</div>
     <h2>${esc(t.title)}${isPast?` <span class="badge">done ${fmt(S.done[t.id])}</span>`:""}</h2>
     <p class="what">${esc(t.what)}</p>
     ${linkHTML(t.links)}
@@ -415,7 +420,7 @@ function renderWeeks(){
       <p class="goal">${esc(w.g)}</p>
       ${ts.map(t=>`<div class="task ${S.done[t.id]?"is-done":""}">
         <input type="checkbox" data-id="${t.id}" ${S.done[t.id]?"checked":""} aria-label="Mark day ${t.id} done">
-        <div><div class="tt"><small>D${t.id}</small>${esc(t.title)}</div><p>${esc(t.what)}</p>${linkHTML(t.links)}
+        <div><div class="tt"><small>D${t.id}</small>${esc(t.title)}${t.opt?` <small>optional</small>`:""}</div><p>${esc(t.what)}</p>${linkHTML(t.links)}
         ${S.done[t.id]?`<div class="when">done ${fmt(S.done[t.id])}</div>`:""}
         <a href="#today" class="open" data-open="${t.id}">${S.done[t.id]?"Revisit":"Open"} this session →</a></div></div>`).join("")}
     </details>`;
